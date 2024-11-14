@@ -1,0 +1,24 @@
+.main_container {
+    min-height: 100vh;
+    color: var(--main-font);
+    position: relative;
+    width: 100%;
+    background-color: #000;
+    z-index: 1;
+    background-size: cover;
+  
+    .main {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+  
+      .page_container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+  
+        min-height: 600px;
+      }
+    }
+  }

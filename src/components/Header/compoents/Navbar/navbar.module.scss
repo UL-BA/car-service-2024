@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  justify-content: center;
+  padding: 0 24px;
+  width: 100%;
+}
+
+.list {
+  list-style-type: none;
+  display: flex;
+  flex-direction: row;
+  gap: min(72px, 5vw);
+  letter-spacing: 0.02em;
+  margin: 0;
+  padding: 0;
+}
+
+.link {
+  color: white;
+  text-decoration: none;
+  border-bottom: solid 1px transparent;
+  transition: border-bottom-color 0.5s ease, color 0.5s ease;
+}
+
+.link:hover {
+  border-bottom-color: white;
+  color: white;
+}
