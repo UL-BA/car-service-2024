@@ -8,7 +8,6 @@ import ServicesSection from "./components/ServicesSection";
 import TestimonialsSection from "./components/TestimonialsSection";
 import styles from "./app.module.scss";
 
-// Helper function to scroll to a specific section smoothly
 const scrollToSection = (id) => {
   const element = document.getElementById(id);
   if (element) {
@@ -16,30 +15,28 @@ const scrollToSection = (id) => {
   }
 };
 
-// Component to handle scrolling based on the URL path
 function ScrollToSectionHandler() {
   const location = useLocation();
-  const [isFirstLoad, setIsFirstLoad] = React.useState(true);
 
   React.useEffect(() => {
     const sectionId = location.pathname.replace("/", "");
 
-    if (isFirstLoad) {
-      // On first load or reload, scroll to top
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      setIsFirstLoad(false);
-    } else if (sectionId) {
-      // On navigation, scroll to the specified section
+    if (sectionId) {
       requestAnimationFrame(() => {
         scrollToSection(sectionId);
       });
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
-  }, [location, isFirstLoad]);
+
+    window.onbeforeunload = () => {
+      window.scrollTo(0, 0);
+    };
+  }, [location]);
 
   return null;
 }
 
-// Main App Component
 function App() {
   return (
     <Router>
@@ -47,7 +44,6 @@ function App() {
         <Header />
         <ScrollToSectionHandler />
 
-        {/* Define sections with corresponding IDs */}
         <MainSection id="home" />
         <InfoSection id="info" />
         <ServicesSection id="workshops" />

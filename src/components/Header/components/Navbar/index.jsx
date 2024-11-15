@@ -5,11 +5,11 @@ function Navbar() {
   return (
     <div className={styles.container}>
       <ul className={styles.list}>
-        {/* <li className={styles.item}>
+        <li className={styles.item}>
           <Link className={styles.link} to="/">
             Home
           </Link>
-        </li> */}
+        </li>
         <li className={styles.item}>
           <Link className={styles.link} to="/about">
             About
