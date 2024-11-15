@@ -1,0 +1,56 @@
+Sprint 1
+
+Foundational features to support user accounts, basic navigation, and essential service information.
+
+1. User Registration and Login
+
+User Story:
+As a new user, 
+I want to create an account 
+so that I can access personalized features.
+
+Acceptance Criteria:
+
+User can register with an email and password.
+User receives a confirmation after successful registration.
+User can log in using registered credentials.
+User can reset a forgotten password.
+
+2. Service Category Selection
+
+User Story:
+As a user, 
+I want to browse car service categories (e.g., repair shops, car washes) 
+so that I can easily find relevant services.
+
+Acceptance Criteria:
+
+User can view a list of service categories.
+Categories include major options like repair shops, car washes, etc.
+User can click a category to view services in that group.
+
+3. Search by Service Name and Category
+
+User Story:
+As a user, 
+I want to search for services by name or category 
+so that I can find specific services that meet my needs.
+
+Acceptance Criteria:
+
+User can enter a service name or category in the search bar.
+Search results show relevant services based on the query.
+User can further filter or sort results.
+
+4. Service Details Page
+
+User Story:
+As a user, 
+I want to view detailed information about a selected car service 
+so that I can understand what services they offer and how to contact them.
+
+Acceptance Criteria:
+
+Service details include address, contact info, hours, and available services.
+User can view additional service info (e.g., pricing, special offers).
+Links to external websites or maps are provided.
