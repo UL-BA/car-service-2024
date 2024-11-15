@@ -1,0 +1,63 @@
+#SPRINT1 - OVERVIEW
+Sprint 1 Overview: Road Ready Project
+Sprint Duration: 10.10.2024-15.11.2024
+Team: Sofiia, Nargiz, Alina
+
+Focused on layout and user interface design.
+Specialized in component creation and styling.
+Facilitated project setup, documentation, and backend integration planning.
+#Sprint Goal:
+Lay the foundational structure for the Road Ready platform, ensuring a visually appealing and user-friendly interface with basic functionality, including service listings and smooth navigation.
+
+Deliverables:
+1. Project Setup and Initial Documentation
+
+Established the project environment using Vite for a modern and efficient React workflow.
+Added initial documentation to README.md and Sprint_1.txt for clear project guidelines and user stories.
+2. Frontend Development
+
+Designed core sections of the website, including:
+Main Section: Eye-catching landing page with engaging visuals.
+Info Section: Informative overview of platform features.
+Services Section: Comprehensive layout displaying car care services with styling and placeholder images.
+Testimonials Section: Added customer feedback section with dummy data for visual design purposes.
+Integrated a Header with logo and tab icons for brand identity.
+Implemented smooth scrolling behavior to enhance user navigation between sections.
+3. Media and Assets
+
+Uploaded essential media assets (e.g., logos, car images, team photos) to enrich the design and visual appeal.
+Completed User Stories (Sprint 1 Scope):
+As a visitor, I want a clean and intuitive landing page to understand the platform's purpose.
+As a user, I want to view available car services on a well-organized section.
+As a user, I want the website to have smooth scrolling for seamless navigation.
+Key Files and Contributions:
+Frontend Structure:
+
+App.jsx: Integrated components and routing logic.
+components: Organized directory for scalable component management.
+Styling with app.module.scss and index.css.
+Visual Assets:
+
+Media files such as logo.jpg, car-img.jpg, and team photos provide a polished, professional look.
+Documentation:
+
+README.md and Sprint_1.txt outline project scope and Sprint 1 user stories.
+Challenges Faced:
+Managing media assets to maintain consistent styling across sections.
+Aligning scrolling functionality with component rendering for smooth user experience.
+Retrospective:
+What went well?
+
+Excellent collaboration and task ownership among team members.
+Significant progress in UI/UX design with fully functional sections.
+What can be improved?
+
+Plan for integrating backend functionalities in Sprint 2.
+Ensure consistent coding standards using ESLint (eslint.config.js).
+Action Items for Sprint 2:
+
+Implement user registration and login functionality.
+Integrate MongoDB for dynamic service listings.
+Finalize Google Maps integration for workshop location display.
+Summary:
+Sprint 1 successfully established the foundation of Road Ready, delivering a visually rich, user-friendly interface and aligning with the project’s core goals. The focus shifts to backend development and feature integration in Sprint 2.
