@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,600,800&display=swap');
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    color: #e0e0e0;
+    line-height: 1.6;
+}
+
+.gridContainer {
+    transform: scale(0.9);
+    margin: 40px auto;
+    overflow: hidden;
+    background-image: url('../../assets/front3.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+                0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+                0 12.5px 10px rgba(0, 0, 0, 0.06),
+                0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+                0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+                0 100px 80px rgba(0, 0, 0, 0.12);
+    min-height: 600px;
+}
+
+/* Banner Text Styling */
+.bannerText {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+}
+
+.blurredContainer {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    padding: 0;
+}
+
+.blurredBanner {
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 15px;
+    padding: 30px;
+    max-width: 50%;
+    text-align: left;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+}
+
+.blurredBanner h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #ff9e3a;
+    margin-bottom: 15px;
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+.orangeText {
+    color: #ff9e3a;
+    font-weight: 800;
+    font-size: 1.5rem;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.blurredBanner p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: #d1d1d1;
+    line-height: 1.8;
+}
+
+@media (max-width: 768px) {
+    .gridContainer {
+        padding: 20px;
+    }
+
+    .bannerText {
+        font-size: 2.8rem;
+    }
+
+    .blurredBanner {
+        max-width: 100%;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .blurredBanner h2 {
+        font-size: 2rem;
+    }
+
+    .blurredBanner p {
+        font-size: 1rem;
+    }
+
+    .orangeText {
+        font-size: 1.3rem;
+    }
+}
