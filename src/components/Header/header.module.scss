@@ -8,12 +8,9 @@
     justify-content: center;
     align-items: center;
     font-weight: normal;
-    background-color: black;
+    background-color: rgb(16, 16, 16);
     z-index: 1000;
   
-    &:hover {
-      background-color: #000000;
-    }
     .container {
       width: 80%;
       max-width: 1600px;
@@ -21,4 +18,15 @@
       margin-left: auto;
       margin-right: auto;
     }
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    padding-bottom: 5px;
+  }
+  
+  .logoImage {
+    height: 50px; /* Adjust the height as needed */
+    width: auto;
   }
