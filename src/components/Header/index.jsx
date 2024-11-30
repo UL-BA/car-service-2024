@@ -6,7 +6,7 @@ export default function Header() {
   return (
     <header className={styles.header}>
       <div className={styles.container}>
-        <div className={styles.logo}>
+        <div id="home" className={styles.logo}>
           <img src={logo} alt="Logo" className={styles.logoImage} />
         </div>
         <Navbar />

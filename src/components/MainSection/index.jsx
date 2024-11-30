@@ -6,7 +6,7 @@ function MainSection() {
   const navigate = useNavigate();
 
   const handleExploreClick = () => {
-    navigate("/workshops");
+    navigate("#workshops");
   };
 
   return (

@@ -1,4 +1,3 @@
-
 .container {
   display: flex;
   justify-content: center;
@@ -16,15 +15,26 @@
   margin: 0;
   padding: 0;
 }
-.link {
+
+.item button {
+  background: none;
+  border: none;
   color: white;
+  font: inherit;
   text-decoration: none;
+  cursor: pointer;
   border-bottom: solid 1px transparent;
   transition: border-bottom-color 0.5s ease, color 0.5s ease;
+  padding: 0;
 }
-  
-.link:hover {
+
+.item button:hover {
   border-bottom-color: white;
   color: white;
+  cursor: url('./wrench.png'), auto; /* Change cursor to wrench */
 }
-  
+
+.item button:active {
+  cursor: url('./wrench.png'), auto; /* Change cursor on click */
+  transform: scale(0.95); /* Optional: Add a slight click effect */
+}
