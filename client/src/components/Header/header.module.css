@@ -1,0 +1,31 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: normal;
+  background-color: rgb(16, 16, 16);
+  z-index: 1000;
+}
+.header .container {
+  width: 80%;
+  max-width: 1600px;
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  padding-bottom: 5px;
+}
+
+.logoImage {
+  height: 50px; /* Adjust the height as needed */
+  width: auto;
+}/*# sourceMappingURL=header.module.css.map */
