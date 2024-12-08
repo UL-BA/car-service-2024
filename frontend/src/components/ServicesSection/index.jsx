@@ -1,11 +1,33 @@
-import React, { useState } from "react";
-import workshops from "./services";
+import React, { useState, useEffect } from "react";
 import styles from "./servicesSection.module.scss";
 
 const ServicesSection = () => {
+  const [workshops, setWorkshops] = useState([]);
   const [selectedWorkshop, setSelectedWorkshop] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    // Fetch data from the backend
+    const fetchWorkshops = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/api/workshop");
+        if (!response.ok) {
+          throw new Error("Failed to fetch workshops");
+        }
+        const data = await response.json();
+        setWorkshops(data);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchWorkshops();
+  }, []);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value.toLowerCase());
@@ -24,6 +46,9 @@ const ServicesSection = () => {
   const openPopup = (workshop) => setSelectedWorkshop(workshop);
   const closePopup = () => setSelectedWorkshop(null);
   const toggleExpand = () => setIsExpanded(!isExpanded);
+
+  if (loading) return <p>Loading workshops...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
     <section id="workshops" className={styles.workshopGallery}>
