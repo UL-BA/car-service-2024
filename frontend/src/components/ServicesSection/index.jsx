@@ -13,7 +13,7 @@ const ServicesSection = () => {
     // Fetch data from the backend
     const fetchWorkshops = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/workshop");
+        const response = await fetch("https://your-backend-url.vercel.app/api/workshop");
         if (!response.ok) {
           throw new Error("Failed to fetch workshops");
         }
