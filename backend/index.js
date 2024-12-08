@@ -8,29 +8,39 @@ const port = process.env.PORT || 3000;
 // middleware
 app.use(express.json());
 app.use(cors({
-    origin: [
-        'http://localhost:5173',
-        'https://car-service-front.vercel.app'
-    ],
+    origin: '*',  // Temporarily allow all origins
     credentials: true
 }));
 
-// routes
-const workshopRoutes = require('./src/cars/workshop.route');
+// Connect to MongoDB first
+mongoose.connect(process.env.DB_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+    socketTimeoutMS: 45000, // Close sockets after 45s
+})
+.then(() => {
+    console.log("MongoDB connected successfully!");
+    
+    // Only set up routes after DB connection is established
+    const workshopRoutes = require('./src/cars/workshop.route');
+    app.use("/api/workshop", workshopRoutes);
+    
+    app.get("/", (req, res) => {
+        res.json({ message: "Road Ready Server is running!" });
+    });
 
-// API routes should come BEFORE the root route
-app.use("/api/workshop", workshopRoutes);
-
-// Root route comes last
-app.get("/", (req, res) => {
-    res.send("Road Ready Server is running!");
+    // Start server after DB connection
+    app.listen(port, () => {
+        console.log(`Server listening on port ${port}`);
+    });
+})
+.catch(err => {
+    console.error("MongoDB connection error:", err);
 });
 
-// MongoDB connection
-mongoose.connect(process.env.DB_URL)
-    .then(() => console.log("MongoDB connected successfully!"))
-    .catch(err => console.log(err));
-
-app.listen(port, () => {
-    console.log(`Server listening on port ${port}`);
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ message: 'Something broke!' });
 });

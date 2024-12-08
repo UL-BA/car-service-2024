@@ -11,17 +11,15 @@ const postAWorkshop = async (req, res) => {
     }
 }
 
-// get all workshops
-const getAllWorkshops =  async (req, res) => {
+const getAllWorkshops = async (req, res) => {
     try {
-        const workshops = await Workshop.find().sort({ createdAt: -1});
-        res.status(200).send(workshops)
-        
+        const workshops = await Workshop.find().lean().limit(100);  // Add lean() for better performance and limit results
+        res.status(200).json(workshops);
     } catch (error) {
-        console.error("Error fetching workshops", error);
-        res.status(500).send({message: "Failed to fetch workshops"})
+        console.error("Error fetching workshops:", error);
+        res.status(500).json({ message: "Failed to fetch workshops" });
     }
-}
+};
 
 const getSingleWorkshop = async (req, res) => {
     try {
