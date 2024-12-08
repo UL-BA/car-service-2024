@@ -13,7 +13,7 @@ const ServicesSection = () => {
     // Fetch data from the backend
     const fetchWorkshops = async () => {
       try {
-        const response = await fetch("https://car-service-ruby.vercel.app/");
+        const response = await fetch("https://car-service-ruby.vercel.app/api/workshop");
         if (!response.ok) {
           throw new Error("Failed to fetch workshops");
         }
