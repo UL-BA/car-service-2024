@@ -1,0 +1,99 @@
+C:.
+│   README.md
+│   Sprint_1.txt
+│
+├───backend
+│   │   .env
+│   │   index.js
+│   │   package-lock.json
+│   │   package.json
+│   │   vercel.json
+│   │
+│   └───src
+│       ├───cars
+│       │       workshop.controller.js
+│       │       workshop.model.js
+│       │       workshop.route.js
+│       │
+│       ├───middleware
+│       │       verifyAdminToken.js
+│       │
+│       ├───stats
+│       └───users
+└───frontend
+    │   .gitignore
+    │   eslint.config.js
+    │   index.html
+    │   package-lock.json
+    │   package.json
+    │   vite.config.js
+    │
+    ├───public
+    │       vite.svg
+    │
+    └───src
+        │   App.jsx
+        │   app.module.scss
+        │   index.css
+        │   main.jsx
+        │
+        ├───assets
+        │       1.png
+        │       2.png
+        │       3.png
+        │       4.png
+        │       5.png
+        │       6.png
+        │       7.png
+        │       ania.jpg
+        │       car-img.jpg
+        │       car-img1.avif
+        │       car-img1.jpg
+        │       car-img2.avif
+        │       car.jpg
+        │       car1.jpg
+        │       car2.jpg
+        │       car3.jpg
+        │       front.jpg
+        │       front1.jpg
+        │       front3.jpg
+        │       icon.jpg
+        │       kasia.jpg
+        │       logo.jpg
+        │       marek.jpg
+        │       react.svg
+        │
+        └───components
+            │   LoginSignupPage.jsx
+            │   LoginSignupPage.module.scss
+            │
+            ├───Footer
+            │       footer.module.scss
+            │       index.jsx
+            │
+            ├───Header
+            │   │   header.module.scss
+            │   │   index.jsx
+            │   │   
+            │   └───components
+            │       └───Navbar
+            │               index.jsx
+            │               navbar.module.scss
+            │               wrench.png
+            │
+            ├───InfoSection
+            │       index.jsx
+            │       infoSection.module.scss
+            │
+            ├───MainSection
+            │       index.jsx
+            │       mainSection.module.scss
+            │
+            ├───ServicesSection
+            │       index.jsx
+            │       services.js
+            │       servicesSection.module.scss
+            │
+            └───TestimonialsSection
+                    index.jsx
+                    TestimonialsSection.module.scss
