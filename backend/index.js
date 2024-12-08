@@ -8,39 +8,55 @@ const port = process.env.PORT || 3000;
 // middleware
 app.use(express.json());
 app.use(cors({
-    origin: '*',  // Temporarily allow all origins
+    origin: '*',
     credentials: true
 }));
 
-// Connect to MongoDB first
-mongoose.connect(process.env.DB_URL, {
+// MongoDB connection options
+const mongoOptions = {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
-    socketTimeoutMS: 45000, // Close sockets after 45s
-})
-.then(() => {
-    console.log("MongoDB connected successfully!");
-    
-    // Only set up routes after DB connection is established
-    const workshopRoutes = require('./src/cars/workshop.route');
-    app.use("/api/workshop", workshopRoutes);
-    
-    app.get("/", (req, res) => {
-        res.json({ message: "Road Ready Server is running!" });
-    });
+    serverSelectionTimeoutMS: 5000,
+    socketTimeoutMS: 5000,
+};
 
-    // Start server after DB connection
+// Connect to MongoDB
+let isConnected = false;
+const connectDB = async () => {
+    if (isConnected) return;
+
+    try {
+        await mongoose.connect(process.env.DB_URL, mongoOptions);
+        isConnected = true;
+        console.log('MongoDB connected successfully!');
+    } catch (error) {
+        console.error('MongoDB connection error:', error);
+        throw error;
+    }
+};
+
+// Routes
+const workshopRoutes = require('./src/cars/workshop.route');
+
+// Initialize routes
+app.use("/api/workshop", async (req, res, next) => {
+    try {
+        await connectDB();
+        next();
+    } catch (error) {
+        res.status(500).json({ error: 'Database connection failed' });
+    }
+}, workshopRoutes);
+
+app.get("/", (req, res) => {
+    res.json({ message: "Road Ready Server is running!" });
+});
+
+// Only start server if not in Vercel environment
+if (process.env.NODE_ENV !== 'production') {
     app.listen(port, () => {
         console.log(`Server listening on port ${port}`);
     });
-})
-.catch(err => {
-    console.error("MongoDB connection error:", err);
-});
+}
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ message: 'Something broke!' });
-});
+module.exports = app;
