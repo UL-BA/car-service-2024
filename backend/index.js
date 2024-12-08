@@ -1,14 +1,15 @@
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
+require('dotenv').config()
 const mongoose = require('mongoose');
 
 async function main() {
-    await mongoose.connect('mongodb+srv://mcspyder:<db_password>@cluster0.pthwz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');
+    await mongoose.connect(process.env.DB_URL);
     app.use('/', (req, res) => {
     res.send("Road Ready is running!");
 });
-}
+} 
 
 main().then(()=>console.log("mango connected succesfully")).catch(err => console.log(err));
 
