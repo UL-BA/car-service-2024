@@ -1,14 +1,15 @@
 const mongoose = require('mongoose');
 
+// Add timestamps for better tracking
 const workshopSchema = new mongoose.Schema({
     id: { type: Number, required: true, unique: true },
     name: { type: String, required: true },
     address: { type: String, required: true },
     phone: { type: String, required: true },
-    paymentMethods: { type: [String], required: true }, // Array of strings for payment methods
-    services: { type: [String], required: true }, // Array of strings for services
-    acceptedBrands: { type: [String], required: true } // Array of strings for car brands
-});
+    paymentMethods: { type: [String], required: true },
+    services: { type: [String], required: true },
+    acceptedBrands: { type: [String], required: true }
+}, { timestamps: true });
 
 const Workshop = mongoose.model('Workshop', workshopSchema);
 

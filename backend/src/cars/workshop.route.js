@@ -9,20 +9,12 @@ const router =  express.Router();
 // get =  when get something back from db
 // put/patch = when edit or update something
 // delete = when delete something
+// Your routes look good, but let's organize them better
+router.route('/')
+    .get(getAllWorkshops)
+    .post(postAWorkshop);
 
-// post a workshop
-// In workshop.route.js
-router.post("/create-workshop", postAWorkshop) // Remove verifyAdminToken
-// get all workshops
-router.get("/", getAllWorkshops);
-
-// single workshop endpoint
-router.get("/:id", getSingleWorkshop);
-
-// update a workshop endpoint
-router.put("/edit/:id", verifyAdminToken, UpdateWorkshop);
-
-router.delete("/:id", verifyAdminToken, deleteAWorkshop)
-
-
-module.exports = router;
+router.route('/:id')
+    .get(getSingleWorkshop)
+    .put(verifyAdminToken, UpdateWorkshop)
+    .delete(verifyAdminToken, deleteAWorkshop);
