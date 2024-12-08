@@ -10,23 +10,26 @@ app.use(express.json());
 app.use(cors({
     origin: [
         'http://localhost:5173',
-        'https://car-service-front.vercel.app'  // Add your frontend Vercel URL
+        'https://car-service-front.vercel.app'
     ],
     credentials: true
-}))
-// Root route
+}));
+
+// routes
+const workshopRoutes = require('./src/cars/workshop.route');
+
+// API routes should come BEFORE the root route
+app.use("/api/workshop", workshopRoutes);
+
+// Root route comes last
 app.get("/", (req, res) => {
     res.send("Road Ready Server is running!");
 });
 
-// routes
-const workshopRoutes = require('./src/cars/workshop.route');
-app.use("/api/workshop", workshopRoutes);
-
 // MongoDB connection
 mongoose.connect(process.env.DB_URL)
     .then(() => console.log("MongoDB connected successfully!"))
-    .catch(err => console.log("MongoDB connection error:", err));
+    .catch(err => console.log(err));
 
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
