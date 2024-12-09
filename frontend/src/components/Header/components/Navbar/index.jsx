@@ -1,7 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import styles from "./navbar.module.scss";
+import { useAuth } from '../../../../contexts/AuthContext';
+import { FaUser } from 'react-icons/fa';
 
 function Navbar() {
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   const handleNavigation = (hash) => {
@@ -47,9 +50,18 @@ function Navbar() {
           </button>
         </li>
         <li className={styles.item}>
-          <button className={styles.link} onClick={() => navigate("/login")}>
-            Log In
-          </button>
+          {user ? (
+            <button 
+              className={styles.profileButton}
+              onClick={() => navigate('/profile')}
+            >
+              <FaUser />
+            </button>
+          ) : (
+            <button onClick={() => navigate('/login')}>
+              Log In
+            </button>
+          )}
         </li>
       </ul>
     </div>

@@ -8,7 +8,7 @@ import ServicesSection from "./components/ServicesSection";
 import TestimonialsSection from "./components/TestimonialsSection";
 import LoginSignupPage from "./components/LoginSignupPage";
 import styles from "./app.module.scss";
-
+import ProfilePage from './components/ProfilePage';
 const scrollToSection = (id) => {
   const element = document.getElementById(id);
   if (element) {
@@ -55,8 +55,8 @@ function App() {
 
         {/* Login/Signup Page */}
         <Route path="/login" element={<LoginSignupPage />} />
-      </Routes>
-
+        <Route path="/profile" element={<ProfilePage />} />
+        </Routes>
       <Footer />
     </div>
   </Router>

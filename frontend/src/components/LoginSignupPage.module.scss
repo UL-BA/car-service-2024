@@ -1,49 +1,198 @@
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-color: #999;
-  }
-  h2 {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(145deg, #1a1a1a, #2d2d2d);
+  padding: 20px;
+}
 
-    color: black;
+.formCard {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  padding: 40px;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+h2 {
+  color: white;
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 28px;
+}
+
+.subtitle {
+  color: #888;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  transition: all 0.3s ease;
+
+  &::placeholder {
+    color: #888;
   }
-  .form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 300px;
+
+  &:focus {
+    outline: none;
+    border-color: #f48e21;
   }
-  p {
-    color: black;
+}
+
+.errorInput {
+  border-color: #ff4444;
+}
+
+.errorText {
+  color: #ff4444;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.submitButton {
+  background: linear-gradient(145deg, #f48e21, #ff7a1a);
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
   }
-  input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+}
+
+.divider {
+  text-align: center;
+  margin: 20px 0;
+  position: relative;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 45%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
   }
-  
+
+  &::before {
+    left: 0;
+  }
+
+  &::after {
+    right: 0;
+  }
+
+  span {
+    background: #1a1a1a;
+    color: #888;
+    padding: 0 10px;
+  }
+}
+
+.googleButton {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  background: transparent;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+}
+
+.googleIcon {
+  font-size: 18px;
+}
+
+.switchMode {
+  text-align: center;
+  margin-top: 20px;
+  color: #888;
+
   button {
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    background-color: #007bff;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  
-  .switchMode {
     background: none;
     border: none;
-    color: blue;
+    color: #f48e21;
     cursor: pointer;
-    text-decoration: underline;
+    font-weight: 600;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
-  
+}
+
+.errorMessage,
+.successMessage {
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.errorMessage {
+  background: rgba(255, 68, 68, 0.1);
+  border: 1px solid rgba(255, 68, 68, 0.2);
+  color: #ff4444;
+}
+
+.successMessage {
+  background: rgba(39, 174, 96, 0.1);
+  border: 1px solid rgba(39, 174, 96, 0.2);
+  color: #27ae60;
+  animation: fadeIn 0.3s ease;
+}
+
+.footerText {
+  text-align: center;
+  color: #888;
+  margin-top: 30px;
+  font-size: 12px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
