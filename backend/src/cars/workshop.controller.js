@@ -11,11 +11,10 @@ const postAWorkshop = async (req, res) => {
     }
 }
 
-// Add response type consistency
 const getAllWorkshops = async (req, res) => {
     try {
         const workshops = await Workshop.find().lean().limit(100);
-        res.status(200).json(workshops);  // Using .json() consistently
+        res.status(200).json(workshops);
     } catch (error) {
         console.error("Error fetching workshops:", error);
         res.status(500).json({ message: "Failed to fetch workshops" });
@@ -38,7 +37,6 @@ const getSingleWorkshop = async (req, res) => {
 
 }
 
-// update workshop data
 const UpdateWorkshop = async (req, res) => {
     try {
         const {id} = req.params;
