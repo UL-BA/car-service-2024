@@ -1,67 +1,120 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { GoogleMap } from "@react-google-maps/api";
+import axios from "axios";
 import styles from "./servicesSection.module.scss";
-import { useGetWorkshopsQuery } from '../../redux/features/workshopApi';
+import { useGetWorkshopsQuery } from "../../redux/features/workshopApi";
+import config from "../../config";
+
+const GEOCODING_API_URL = `https://maps.googleapis.com/maps/api/geocode/json?key=${config.GOOGLE_MAPS_API_KEY}`;
+
+const AdvancedMarker = ({ map, position }) => {
+  const markerRef = useRef(null);
+
+  useEffect(() => {
+    if (!map || !position) return;
+
+    if (!markerRef.current) {
+      markerRef.current = new google.maps.Marker({
+        position,
+        map,
+        icon: {
+          url: "/src/assets/custom-marker.png",
+          scaledSize: new google.maps.Size(40, 40),
+        },
+      });
+    } else {
+      markerRef.current.setPosition(position);
+      markerRef.current.setMap(map);
+    }
+
+    return () => {
+      if (markerRef.current) {
+        markerRef.current.setMap(null);
+      }
+    };
+  }, [map, position]);
+
+  return null;
+};
 
 const ServicesSection = () => {
   const [selectedWorkshop, setSelectedWorkshop] = useState(null);
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [markerPosition, setMarkerPosition] = useState({ lat: 0, lng: 0 });
+  const [smallMapInstance, setSmallMapInstance] = useState(null);
+  const [fullScreenMapInstance, setFullScreenMapInstance] = useState(null);
+  const [isFullScreenMapOpen, setIsFullScreenMapOpen] = useState(false);
 
   const { data: workshops = [], isLoading, error } = useGetWorkshopsQuery();
 
-  const handleSearchChange = (event) => {
-    setSearchQuery(event.target.value.toLowerCase());
+  useEffect(() => {
+    if (selectedWorkshop) {
+      const fetchCoordinates = async () => {
+        try {
+          const response = await axios.get(GEOCODING_API_URL, {
+            params: {
+              address: selectedWorkshop.address,
+              region: "PL",
+              components: "country:PL",
+            },
+          });
+
+          if (response.data.status === "OK" && response.data.results.length > 0) {
+            const location = response.data.results[0].geometry.location;
+            setMarkerPosition({ lat: location.lat, lng: location.lng });
+          } else {
+            console.error("Geocoding failed or returned ambiguous results.");
+            setMarkerPosition({ lat: 51.759, lng: 19.457 });
+          }
+        } catch (error) {
+          console.error("Error fetching geocoding data:", error);
+          setMarkerPosition({ lat: 51.759, lng: 19.457 });
+        }
+      };
+
+      fetchCoordinates();
+    }
+  }, [selectedWorkshop]);
+
+  const openPopup = (workshop) => {
+    setSelectedWorkshop(workshop);
+    setIsFullScreenMapOpen(false);
   };
 
-  const filteredWorkshops = workshops.filter((workshop) => {
-    const nameMatch = workshop.name.toLowerCase().includes(searchQuery);
-    const addressMatch = workshop.address.toLowerCase().includes(searchQuery);
-    const servicesMatch = workshop.services.some((service) =>
-      service.toLowerCase().includes(searchQuery)
-    );
+  const closePopup = () => {
+    setSelectedWorkshop(null);
+    setIsFullScreenMapOpen(false);
+  };
 
-    return nameMatch || addressMatch || servicesMatch;
-  });
+  const openFullScreenMap = () => {
+    setIsFullScreenMapOpen(true);
+  };
 
-  const openPopup = (workshop) => setSelectedWorkshop(workshop);
-  const closePopup = () => setSelectedWorkshop(null);
-  const toggleExpand = () => setIsExpanded(!isExpanded);
+  const closeFullScreenMap = () => {
+    setIsFullScreenMapOpen(false);
 
-  if (isLoading) return <p>Loading workshops...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+    if (smallMapInstance) {
+      smallMapInstance.panTo(markerPosition);
+    }
+  };
 
   return (
     <section id="workshops" className={styles.workshopGallery}>
-      <div className={styles.searchContainer}>
-        <input
-          type="text"
-          placeholder="Search by workshop name, location, or services..."
-          value={searchQuery}
-          onChange={handleSearchChange}
-          className={styles.searchInput}
-        />
-      </div>
-
       <div className={styles.workshopGrid}>
-        {filteredWorkshops.length > 0 ? (
-          filteredWorkshops.map((workshop) => (
-            <div
-              key={workshop.id}
-              className={styles.workshopItem}
-              onClick={() => openPopup(workshop)}
-            >
-              <img
-                src={`/src/assets/${workshop.id}.png`}
-                alt={workshop.name}
-                className={styles.workshopImage}
-              />
-              <h4>{workshop.name}</h4>
-              <p>{workshop.address}</p>
-            </div>
-          ))
-        ) : (
-          <p className={styles.noResults}>No workshops found.</p>
-        )}
+        {workshops.map((workshop) => (
+          <div
+            key={workshop.id}
+            className={styles.workshopItem}
+            onClick={() => openPopup(workshop)}
+          >
+            <img
+              src={`/src/assets/${workshop.id}.png`}
+              alt={workshop.name}
+              className={styles.workshopImage}
+            />
+            <h4>{workshop.name}</h4>
+            <p>{workshop.address}</p>
+          </div>
+        ))}
       </div>
 
       {selectedWorkshop && (
@@ -71,42 +124,52 @@ const ServicesSection = () => {
               X
             </button>
             <h3>{selectedWorkshop.name}</h3>
-            <div className={styles.popupImage}>
-              <img
-                src={`/src/assets/${selectedWorkshop.id}.png`}
-                alt={selectedWorkshop.name}
-                className={styles.popupImageContent}
-              />
-            </div>
             <p>
               <strong>Phone:</strong> {selectedWorkshop.phone}
             </p>
-            <div className={styles.popupInfo}>
-              <p>
-                <strong>Accepted Car Brands:</strong>{" "}
-                {selectedWorkshop.acceptedBrands?.join(", ") || "N/A"}
-              </p>
-              <p>
-                <strong>Services Provided:</strong>
-              </p>
-              <div className={styles.truncate}>
-                {selectedWorkshop.services.slice(0, 3).join(", ")}
-              </div>
-              {selectedWorkshop.services.length > 3 && !isExpanded && (
-                <span className={styles.showMore} onClick={toggleExpand}>
-                  ... See More
-                </span>
-              )}
-              {isExpanded && (
-                <div className={styles.fullText}>
-                  {selectedWorkshop.services.join(", ")}
-                </div>
-              )}
-            </div>
             <p>
-              <strong>Payment Methods:</strong>{" "}
-              {selectedWorkshop.paymentMethods?.join(", ") || "N/A"}
+              <strong>Accepted Brands:</strong>{" "}
+              {selectedWorkshop.acceptedBrands.join(", ") || "N/A"}
             </p>
+            <p>
+              <strong>Services:</strong>{" "}
+              {selectedWorkshop.services.join(", ") || "N/A"}
+            </p>
+            <GoogleMap
+              mapContainerStyle={{ width: "400px", height: "200px" }}
+              center={markerPosition}
+              zoom={15}
+              onLoad={(map) => setSmallMapInstance(map)}
+            >
+              <AdvancedMarker map={smallMapInstance} position={markerPosition} />
+            </GoogleMap>
+            <button
+              className={styles.fullScreenButton}
+              onClick={openFullScreenMap}
+            >
+              Open Full Screen
+            </button>
+          </div>
+        </div>
+      )}
+
+      {isFullScreenMapOpen && selectedWorkshop && (
+        <div className={styles.fullScreenMapOverlay}>
+          <div className={styles.fullScreenMapContainer}>
+            <button className={styles.closeBtn} onClick={closeFullScreenMap}>
+              X
+            </button>
+            <GoogleMap
+              mapContainerStyle={{ width: "100%", height: "100%" }}
+              center={markerPosition}
+              zoom={15}
+              onLoad={(map) => setFullScreenMapInstance(map)}
+            >
+              <AdvancedMarker
+                map={fullScreenMapInstance}
+                position={markerPosition}
+              />
+            </GoogleMap>
           </div>
         </div>
       )}
