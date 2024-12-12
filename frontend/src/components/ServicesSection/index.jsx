@@ -7,7 +7,6 @@ const ServicesSection = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Replace useEffect with RTK Query hook
   const { data: workshops = [], isLoading, error } = useGetWorkshopsQuery();
 
   const handleSearchChange = (event) => {
