@@ -1,0 +1,40 @@
+{
+    "navigation": {
+      "home": "Home",
+      "about": "About",
+      "workshops": "Workshops",
+      "testimonials": "Testimonials",
+      "login": "Log In"
+    },
+    "main": {
+      "title": "Choose The Best Care",
+      "subtitle": "Find a workshop for your car today!",
+      "explore": "Explore Workshops"
+    },
+    "infoSection": {
+        "logo": "Be Road Ready.",
+        "bannerHeadline": "For everything\nYour car needs.",
+        "qualityStatement": "choose quality.\nchoose us.",
+        "purposeTitle": "Our Purpose",
+        "purposeText": "With the quality, technology, and expertise that you and your car deserve. With transparent billing and fast, reliable service you can trust for miles to come."
+      },
+    "auth": {
+      "login": "Log In",
+      "signup": "Sign Up",
+      "email": "Email",
+      "password": "Password",
+      "loginButton": "Log In",
+      "signupButton": "Sign Up",
+      "googleLogin": "Sign in with Google",
+      "haveAccount": "Already have an account?",
+      "noAccount": "Don't have an account?"
+    },
+    "workshops": {
+      "search": "Search by workshop name, location, or services...",
+      "noResults": "No workshops found.",
+      "acceptedBrands": "Accepted Car Brands",
+      "services": "Services Provided",
+      "paymentMethods": "Payment Methods",
+      "phone": "Phone"
+    }
+  }

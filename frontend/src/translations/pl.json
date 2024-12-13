@@ -1,0 +1,40 @@
+{
+    "navigation": {
+      "home": "Strona główna",
+      "about": "O nas",
+      "workshops": "Warsztaty",
+      "testimonials": "Opinie",
+      "login": "Zaloguj się"
+    },
+    "main": {
+      "title": "Wybierz Najlepszą Opiekę",
+      "subtitle": "Znajdź warsztat dla swojego samochodu już dziś!",
+      "explore": "Przeglądaj Warsztaty"
+    },
+    "infoSection": {
+    "logo": "Bądź Gotowy na Drogę.",
+    "bannerHeadline": "Dla wszystkiego,\nczego potrzebuje Twój samochód.",
+    "qualityStatement": "wybierz jakość.\nwybierz nas.",
+    "purposeTitle": "Nasza Misja",
+    "purposeText": "Z jakością, technologią i wiedzą, na które Ty i Twój samochód zasługujecie. Z przejrzystym rozliczaniem oraz szybką i niezawodną obsługą, której możesz ufać przez kolejne kilometry."
+  },
+    "auth": {
+      "login": "Zaloguj się",
+      "signup": "Zarejestruj się",
+      "email": "Email",
+      "password": "Hasło",
+      "loginButton": "Zaloguj",
+      "signupButton": "Zarejestruj",
+      "googleLogin": "Zaloguj przez Google",
+      "haveAccount": "Masz już konto?",
+      "noAccount": "Nie masz konta?"
+    },
+    "workshops": {
+      "search": "Szukaj po nazwie warsztatu, lokalizacji lub usługach...",
+      "noResults": "Nie znaleziono warsztatów.",
+      "acceptedBrands": "Obsługiwane marki",
+      "services": "Dostępne usługi",
+      "paymentMethods": "Metody płatności",
+      "phone": "Telefon"
+    }
+  }
