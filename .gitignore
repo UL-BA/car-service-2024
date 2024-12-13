@@ -1,2 +1,3 @@
 backend/firebase-service-account.json
 frontend/src/firebase/firebase.config.js
+.DS_Store

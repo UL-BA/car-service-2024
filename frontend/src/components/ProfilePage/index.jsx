@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./ProfilePage.module.scss";
 import { auth } from "../../firebase/firebase.config";
-import { signOut } from "firebase/auth";
+import { signOut, updateProfile } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { FaUser } from "react-icons/fa";
 
@@ -9,6 +9,29 @@ const ProfilePage = () => {
   const [nickname, setNickname] = useState("User");
   const navigate = useNavigate();
   const user = auth.currentUser;
+
+  useEffect(() => {
+    // Fetch the nickname from Firebase when the component mounts
+    if (user?.displayName) {
+      setNickname(user.displayName);
+    }
+  }, [user]);
+
+  const handleNicknameChange = async (e) => {
+    const newNickname = e.target.value;
+    setNickname(newNickname);
+
+    if (user) {
+      try {
+        await updateProfile(user, {
+          displayName: newNickname,
+        });
+        console.log("Nickname updated successfully");
+      } catch (error) {
+        console.error("Error updating nickname:", error);
+      }
+    }
+  };
 
   const handleLogout = async () => {
     try {
@@ -39,7 +62,7 @@ const ProfilePage = () => {
             <input
               type="text"
               value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
+              onChange={handleNicknameChange}
               className={styles.nicknameInput}
             />
             <p className={styles.email}>{user?.email}</p>
