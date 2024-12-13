@@ -1,0 +1,48 @@
+Sprint 2
+
+1. Implement User Registration and Login Functionality
+
+User Story:
+As a new user,
+I want to create an account
+so that I can access personalized features.
+
+Acceptance Criteria:
+
+User can register with an email and password.
+User can log in using registered credentials.
+
+2. Integrate MongoDB for Dynamic Service Listings
+
+User Story:
+As a user,
+I want dynamic service data storage
+so that I can view and manage up-to-date service listings.
+
+Acceptance Criteria:
+
+Services data is stored and retrieved from MongoDB.
+
+3. Finalize Google Maps Integration for Workshop Location Display
+
+User Story:
+As a user,
+I want to view service locations on Google Maps
+so that I can find their exact locations easily.
+
+Acceptance Criteria:
+
+Map displays workshop/service locations.
+User can zoom map pins for more details.
+
+4. Add Functionality for Saving Favorites
+
+User Story:
+As a user,
+I want to save my favorite services
+so that I can easily revisit them later.
+
+Acceptance Criteria:
+
+User can mark a service as a favorite.
+A list of favorites is accessible from the user profile.
