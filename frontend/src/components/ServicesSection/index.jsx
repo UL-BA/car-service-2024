@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { GoogleMap } from "@react-google-maps/api";
 import axios from "axios";
 import styles from "./servicesSection.module.scss";
