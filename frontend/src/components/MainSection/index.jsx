@@ -1,8 +1,10 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./mainSection.module.scss";
+import { useTranslation } from 'react-i18next';
 
 function MainSection() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const handleExploreClick = () => {
@@ -12,12 +14,12 @@ function MainSection() {
   return (
     <section className={styles.mainSection}>
       <div className={styles.textContainer}>
-        <h2 className={styles.heading}>Choose The Best Care</h2>
+        <h2 className={styles.heading}>{t("main.title")}</h2>
         <h3 className={styles.subheading}>
-          Find a workshop for your car today!
+          {t("main.subtitle")}
         </h3>
         <button className={styles.exploreButton} onClick={handleExploreClick}>
-          Explore Workshops
+          {t("main.explore")}
         </button>
       </div>
     </section>

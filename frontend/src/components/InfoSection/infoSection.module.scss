@@ -45,7 +45,6 @@ body {
     justify-content: flex-start;
     padding: 0;
 }
-
 .blurredBanner {
     background: rgba(0, 0, 0, 0.7);
     border-radius: 15px;
@@ -62,6 +61,8 @@ body {
     color: #ff9e3a;
     margin-bottom: 15px;
     text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+    text-align: left;
+    margin-left: -5%;
 }
 
 .orangeText {
@@ -70,6 +71,7 @@ body {
     font-size: 1.5rem;
     margin-top: 10px;
     margin-bottom: 15px;
+
 }
 
 .blurredBanner p {
@@ -78,6 +80,8 @@ body {
     font-weight: 400;
     color: #d1d1d1;
     line-height: 1.8;
+    text-align: left;
+    margin-left: -5%;
 }
 
 @media (max-width: 768px) {

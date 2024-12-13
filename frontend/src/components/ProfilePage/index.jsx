@@ -4,12 +4,14 @@ import { auth } from "../../firebase/firebase.config";
 import { signOut, updateProfile } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { FaUser } from "react-icons/fa";
+import { useTranslation } from 'react-i18next';
 
 const ProfilePage = () => {
   const [nickname, setNickname] = useState("User");
   const navigate = useNavigate();
   const user = auth.currentUser;
-
+  const { t } = useTranslation();
+  
   useEffect(() => {
     // Fetch the nickname from Firebase when the component mounts
     if (user?.displayName) {
