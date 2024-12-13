@@ -20,56 +20,74 @@ function LoginSignupPage() {
 
   const onSubmit = async (data) => {
     try {
+      let userCredential;
       if (isSignup) {
-        await createUserWithEmailAndPassword(
+        userCredential = await createUserWithEmailAndPassword(
           auth,
           data.email,
           data.password
         );
-        setShowSuccessMessage(true);
-        setError("");
-        setTimeout(() => {
-          setIsSignup(false);
-          setShowSuccessMessage(false);
-        }, 3000);
       } else {
-        await signInWithEmailAndPassword(
+        userCredential = await signInWithEmailAndPassword(
           auth,
           data.email,
           data.password
         );
-        navigate('/profile');
       }
-    } catch (error) {
-      // Handle specific Firebase errors with user-friendly messages
-      switch (error.code) {
-        case 'auth/invalid-credential':
-          setError('❌ Wrong email or password, please try again');
-          break;
-        case 'auth/email-already-in-use':
-          setError('📧 This email is already registered. Please try logging in.');
-          break;
-        case 'auth/too-many-requests':
-          setError('⚠️ Too many attempts. Please try again later.');
-          break;
-        default:
-          setError('⚠️ ' + error.message.replace('Firebase:', '').trim());
+
+      // Get token and send to backend
+      const token = await userCredential.user.getIdToken();
+      const response = await fetch('http://localhost:3000/api/users/create-user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          email: userCredential.user.email,
+          uid: userCredential.user.uid
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create user in database');
       }
-    }
-};
-  const handleGoogleSignIn = async () => {
-    try {
-      const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
+
       navigate('/profile');
     } catch (error) {
-      // Don't show error message if user just closed the popup
-      if (error.code !== 'auth/popup-closed-by-user') {
-        setError(error.message.replace('Firebase:', '').trim());
-      }
+      setError(error.message);
     }
 };
+const handleGoogleSignIn = async () => {
+  try {
+    const provider = new GoogleAuthProvider();
+    const userCredential = await signInWithPopup(auth, provider);
+    
+    // Get token and send to backend
+    const token = await userCredential.user.getIdToken();
+    const response = await fetch('http://localhost:3000/api/users/create-user', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        email: userCredential.user.email,
+        uid: userCredential.user.uid
+      })
+    });
 
+    if (!response.ok) {
+      throw new Error('Failed to create user in database');
+    }
+
+    navigate('/profile');
+  } catch (error) {
+    if (error.code !== 'auth/popup-closed-by-user') {
+      setError(error.message.replace('Firebase:', '').trim());
+    }
+  }
+};
   return (
     <div className={styles.container}>
       <div className={styles.formCard}>
