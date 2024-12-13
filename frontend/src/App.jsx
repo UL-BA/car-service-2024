@@ -7,8 +7,13 @@ import InfoSection from "./components/InfoSection";
 import ServicesSection from "./components/ServicesSection";
 import TestimonialsSection from "./components/TestimonialsSection";
 import LoginSignupPage from "./components/LoginSignupPage";
+import ProfilePage from "./components/ProfilePage";
+import { LoadScript } from "@react-google-maps/api";
 import styles from "./app.module.scss";
-import ProfilePage from './components/ProfilePage';
+import config from "./config";
+
+const API_KEY = config.GOOGLE_MAPS_API_KEY;
+
 const scrollToSection = (id) => {
   const element = document.getElementById(id);
   if (element) {
@@ -31,35 +36,34 @@ function ScrollToSectionHandler() {
   return null;
 }
 
-
 function App() {
   return (
-    <Router>
-    <div className={styles.main_container}>
-      <Header />
-      <ScrollToSectionHandler />
-
-      <Routes>
-        {/* Home and main sections */}
-        <Route
-          path="/"
-          element={
-            <>
-              <MainSection id="home" />
-              <InfoSection id="info" />
-              <ServicesSection id="workshops" />
-              <TestimonialsSection id="testimonials" />
-            </>
-          }
-        />
-
-        {/* Login/Signup Page */}
-        <Route path="/login" element={<LoginSignupPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        </Routes>
-      <Footer />
-    </div>
-  </Router>
+    <LoadScript googleMapsApiKey={API_KEY}>
+      <Router>
+        <div className={styles.main_container}>
+          <Header />
+          <ScrollToSectionHandler />
+          <Routes>
+            {/* Home and main sections */}
+            <Route
+              path="/"
+              element={
+                <>
+                  <MainSection id="home" />
+                  <InfoSection id="info" />
+                  <ServicesSection id="workshops" />
+                  <TestimonialsSection id="testimonials" />
+                </>
+              }
+            />
+            {/* Login/Signup Page */}
+            <Route path="/login" element={<LoginSignupPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+          </Routes>
+          <Footer />
+        </div>
+      </Router>
+    </LoadScript>
   );
 }
 
