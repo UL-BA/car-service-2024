@@ -1,8 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { GoogleMap } from "@react-google-maps/api";
-import axios from "axios";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 import styles from "./servicesSection.module.scss";
 import { useGetWorkshopsQuery } from "../../redux/features/workshopApi";
+import {
+  useGetFavoritesQuery,
+  useAddFavoriteMutation,
+  useRemoveFavoriteMutation,
+} from "../../redux/features/favoritesSlice";
 import config from "../../config";
 
 const GEOCODING_API_URL = `https://maps.googleapis.com/maps/api/geocode/json?key=${config.GOOGLE_MAPS_API_KEY}`;
@@ -37,43 +42,56 @@ const AdvancedMarker = ({ map, position }) => {
   return null;
 };
 
-const ServicesSection = () => {
+const ServicesSection = ({ userId }) => {
   const [selectedWorkshop, setSelectedWorkshop] = useState(null);
   const [markerPosition, setMarkerPosition] = useState({ lat: 0, lng: 0 });
   const [smallMapInstance, setSmallMapInstance] = useState(null);
   const [fullScreenMapInstance, setFullScreenMapInstance] = useState(null);
   const [isFullScreenMapOpen, setIsFullScreenMapOpen] = useState(false);
 
-  const { data: workshops = [], isLoading, error } = useGetWorkshopsQuery();
+  // Fetch workshops and user favorites
+  const { data: workshops = [], isLoading: workshopsLoading, error: workshopsError } =
+    useGetWorkshopsQuery();
+  const { data: favorites = [] } = useGetFavoritesQuery(userId);
+
+  const [addFavorite] = useAddFavoriteMutation();
+  const [removeFavorite] = useRemoveFavoriteMutation();
 
   useEffect(() => {
     if (selectedWorkshop) {
       const fetchCoordinates = async () => {
         try {
-          const response = await axios.get(GEOCODING_API_URL, {
-            params: {
-              address: selectedWorkshop.address,
-              region: "PL",
-              components: "country:PL",
-            },
-          });
+          const response = await fetch(
+            `${GEOCODING_API_URL}&address=${selectedWorkshop.address}`
+          );
 
-          if (response.data.status === "OK" && response.data.results.length > 0) {
-            const location = response.data.results[0].geometry.location;
+          const data = await response.json();
+          if (data.status === "OK" && data.results.length > 0) {
+            const location = data.results[0].geometry.location;
             setMarkerPosition({ lat: location.lat, lng: location.lng });
           } else {
             console.error("Geocoding failed or returned ambiguous results.");
-            setMarkerPosition({ lat: 51.759, lng: 19.457 });
+            setMarkerPosition({ lat: 51.759, lng: 19.457 }); // Default location
           }
         } catch (error) {
           console.error("Error fetching geocoding data:", error);
-          setMarkerPosition({ lat: 51.759, lng: 19.457 });
+          setMarkerPosition({ lat: 51.759, lng: 19.457 }); // Default location
         }
       };
 
       fetchCoordinates();
     }
   }, [selectedWorkshop]);
+
+  const toggleFavorite = async (workshopId) => {
+    if (favorites.some((fav) => fav.itemId === workshopId)) {
+      // Remove from favorites
+      await removeFavorite({ userId, itemId: workshopId });
+    } else {
+      // Add to favorites
+      await addFavorite({ userId, itemId: workshopId });
+    }
+  };
 
   const openPopup = (workshop) => {
     setSelectedWorkshop(workshop);
@@ -91,7 +109,6 @@ const ServicesSection = () => {
 
   const closeFullScreenMap = () => {
     setIsFullScreenMapOpen(false);
-
     if (smallMapInstance) {
       smallMapInstance.panTo(markerPosition);
     }
@@ -113,6 +130,19 @@ const ServicesSection = () => {
             />
             <h4>{workshop.name}</h4>
             <p>{workshop.address}</p>
+            <button
+              className={styles.favoriteBtn}
+              onClick={(e) => {
+                e.stopPropagation(); // Prevents opening the popup
+                toggleFavorite(workshop.id);
+              }}
+            >
+              {favorites.some((fav) => fav.itemId === workshop.id) ? (
+                <FaHeart className={styles.heartIcon} />
+              ) : (
+                <FaRegHeart className={styles.heartIcon} />
+              )}
+            </button>
           </div>
         ))}
       </div>
@@ -136,7 +166,7 @@ const ServicesSection = () => {
               {selectedWorkshop.services.join(", ") || "N/A"}
             </p>
             <GoogleMap
-               mapContainerStyle={{
+              mapContainerStyle={{
                 width: "90%",
                 height: "250px",
                 margin: "0 auto",
