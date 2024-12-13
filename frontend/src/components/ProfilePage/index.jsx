@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-import styles from './ProfilePage.module.scss';
-import { auth } from '../../firebase/firebase.config';
-import { signOut } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
-import { FaUser } from 'react-icons/fa';
+import React, { useState } from "react";
+import styles from "./ProfilePage.module.scss";
+import { auth } from "../../firebase/firebase.config";
+import { signOut } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { FaUser } from "react-icons/fa";
 
 const ProfilePage = () => {
-  const [nickname, setNickname] = useState('User');
+  const [nickname, setNickname] = useState("User");
   const navigate = useNavigate();
   const user = auth.currentUser;
 
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      navigate('/');
+      navigate("/");
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error("Logout error:", error);
     }
   };
 
@@ -25,7 +25,11 @@ const ProfilePage = () => {
         <div className={styles.profileHeader}>
           <div className={styles.avatarContainer}>
             {user?.photoURL ? (
-              <img src={user.photoURL} alt="Profile" className={styles.avatar} />
+              <img
+                src={user.photoURL}
+                alt="Profile"
+                className={styles.avatar}
+              />
             ) : (
               <FaUser className={styles.defaultAvatar} />
             )}
@@ -50,10 +54,11 @@ const ProfilePage = () => {
             </p>
           </div>
         </div>
-
-        <button onClick={handleLogout} className={styles.logoutBtn}>
-          Log Out
-        </button>
+        <div className={styles.btn}>
+          <button onClick={handleLogout} className={styles.logoutBtn}>
+            Log Out
+          </button>
+        </div>
       </div>
     </div>
   );
