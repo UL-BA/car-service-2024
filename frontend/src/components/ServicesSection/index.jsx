@@ -136,7 +136,11 @@ const ServicesSection = () => {
               {selectedWorkshop.services.join(", ") || "N/A"}
             </p>
             <GoogleMap
-              mapContainerStyle={{ width: "400px", height: "200px" }}
+               mapContainerStyle={{
+                width: "90%",
+                height: "250px",
+                margin: "0 auto",
+              }}
               center={markerPosition}
               zoom={15}
               onLoad={(map) => setSmallMapInstance(map)}
