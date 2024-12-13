@@ -10,6 +10,7 @@ import {
   signInWithPopup
 } from 'firebase/auth';
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 
 function LoginSignupPage() {
   const [isSignup, setIsSignup] = useState(false);
@@ -17,6 +18,7 @@ function LoginSignupPage() {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const { register, handleSubmit, formState: { errors } } = useForm();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const onSubmit = async (data) => {
     try {
@@ -57,51 +59,53 @@ function LoginSignupPage() {
     } catch (error) {
       setError(error.message);
     }
-};
-const handleGoogleSignIn = async () => {
-  try {
-    const provider = new GoogleAuthProvider();
-    const userCredential = await signInWithPopup(auth, provider);
-    
-    // Get token and send to backend
-    const token = await userCredential.user.getIdToken();
-    const response = await fetch('http://localhost:3000/api/users/create-user', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        email: userCredential.user.email,
-        uid: userCredential.user.uid
-      })
-    });
+  };
 
-    if (!response.ok) {
-      throw new Error('Failed to create user in database');
-    }
+  const handleGoogleSignIn = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const userCredential = await signInWithPopup(auth, provider);
+      
+      // Get token and send to backend
+      const token = await userCredential.user.getIdToken();
+      const response = await fetch('http://localhost:3000/api/users/create-user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          email: userCredential.user.email,
+          uid: userCredential.user.uid
+        })
+      });
 
-    navigate('/profile');
-  } catch (error) {
-    if (error.code !== 'auth/popup-closed-by-user') {
-      setError(error.message.replace('Firebase:', '').trim());
+      if (!response.ok) {
+        throw new Error('Failed to create user in database');
+      }
+
+      navigate('/profile');
+    } catch (error) {
+      if (error.code !== 'auth/popup-closed-by-user') {
+        setError(error.message.replace('Firebase:', '').trim());
+      }
     }
-  }
-};
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.formCard}>
-        <h2>{isSignup ? "Create Account" : "Welcome Back"}</h2>
+        <h2>{isSignup ? t("Create Account") : t("Welcome Back")}</h2>
         <p className={styles.subtitle}>
           {isSignup 
-            ? "Start your journey with us!" 
-            : "We're glad to see you again"}
+            ? t("Start your journey with us!") 
+            : t("We're glad to see you again")}
         </p>
 
         {error && <div className={styles.errorMessage}>{error}</div>}
         {showSuccessMessage && (
           <div className={styles.successMessage}>
-            Account created successfully! Please sign in to continue.
+            {t("Account created successfully! Please sign in to continue.")}
           </div>
         )}
 
@@ -109,14 +113,14 @@ const handleGoogleSignIn = async () => {
           <div className={styles.inputGroup}>
             <input 
               {...register("email", { 
-                required: "Email is required",
+                required: t("Email is required"),
                 pattern: {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: "Invalid email address"
+                  message: t("Invalid email address")
                 }
               })} 
               type="email" 
-              placeholder="Email" 
+              placeholder={t("Email")} 
               className={errors.email ? styles.errorInput : ''}
             />
             {errors.email && (
@@ -127,14 +131,14 @@ const handleGoogleSignIn = async () => {
           <div className={styles.inputGroup}>
             <input 
               {...register("password", { 
-                required: "Password is required",
+                required: t("Password is required"),
                 minLength: {
                   value: 6,
-                  message: "Password must be at least 6 characters"
+                  message: t("Password must be at least 6 characters")
                 }
               })} 
               type="password" 
-              placeholder="Password" 
+              placeholder={t("Password")} 
               className={errors.password ? styles.errorInput : ''}
             />
             {errors.password && (
@@ -143,12 +147,12 @@ const handleGoogleSignIn = async () => {
           </div>
 
           <button type="submit" className={styles.submitButton}>
-            {isSignup ? "Sign Up" : "Log In"}
+            {isSignup ? t("Sign Up") : t("Log In")}
           </button>
         </form>
 
         <div className={styles.divider}>
-          <span>OR</span>
+          <span>{t("OR")}</span>
         </div>
 
         <button 
@@ -156,11 +160,11 @@ const handleGoogleSignIn = async () => {
           className={styles.googleButton}
         >
           <FaGoogle className={styles.googleIcon}/>
-          Continue with Google
+          {t("Continue with Google")}
         </button>
 
         <p className={styles.switchMode}>
-          {isSignup ? "Already have an account?" : "Don't have an account?"}{" "}
+          {isSignup ? t("Already have an account?") : t("Don't have an account?")}{" "}
           <button
             onClick={() => {
               setIsSignup(!isSignup);
@@ -168,11 +172,11 @@ const handleGoogleSignIn = async () => {
               setShowSuccessMessage(false);
             }}
           >
-            {isSignup ? "Log In" : "Sign Up"}
+            {isSignup ? t("Log In") : t("Sign Up")}
           </button>
         </p>
 
-        <p className={styles.footerText}>© 2025 Road Ready. All rights reserved.</p>
+        <p className={styles.footerText}>{t("© 2025 Road Ready. All rights reserved.")}</p>
       </div>
     </div>
   );
