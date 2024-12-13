@@ -23,7 +23,7 @@ Users can register, log in, search by category, view detailed service informatio
 - **Backend**: [Node.js](https://nodejs.org/) and [Express.js](https://expressjs.com/) for RESTful API development.
 - **Database**: [MongoDB](https://www.mongodb.com/) with [Mongoose](https://mongoosejs.com/) for schema-based data modeling.
 - **Maps Integration**: [Google Maps API](https://developers.google.com/maps) for service location and directions.
-- **Authentication**: [Passport.js](http://www.passportjs.org/) for secure user login and authentication.
+- **Authentication**: [Firebase](https://firebase.google.com/) for secure user login and authentication.
 
 ### 🚀 Deployment
 This project is set up for deployment on platforms like [Heroku](https://heroku.com/) or [Vercel](https://vercel.com/), ensuring it’s accessible and scalable.

@@ -2,16 +2,18 @@ import { useNavigate } from "react-router-dom";
 import styles from "./navbar.module.scss";
 import { useAuth } from '../../../../contexts/AuthContext';
 import { FaUser } from 'react-icons/fa';
+import LanguageSwitcher from '../../../LanguageSwitcher/index.jsx';
+import { useTranslation } from 'react-i18next';
 
 function Navbar() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleNavigation = (hash) => {
-    // Scroll to the section with an offset
     const element = document.getElementById(hash);
     if (element) {
-      const offset = -50; // Adjust this value for the desired upward scroll
+      const offset = -50;
       const elementPosition = element.getBoundingClientRect().top + window.scrollY;
       const offsetPosition = elementPosition + offset;
   
@@ -21,7 +23,6 @@ function Navbar() {
       });
     }
   };
-  
 
   return (
     <div className={styles.container}>
@@ -31,22 +32,22 @@ function Navbar() {
             navigate("/");
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}>
-            Home
+            {t('navigation.home')}
           </button>
         </li>
         <li className={styles.item}>
           <button onClick={() => handleNavigation("about")}>
-            About
+            {t('navigation.about')}
           </button>
         </li>
         <li className={styles.item}>
           <button className={styles.link} onClick={() => handleNavigation("workshops")}>
-            Workshops
+            {t('navigation.workshops')}
           </button>
         </li>
         <li className={styles.item}>
           <button className={styles.link} onClick={() => handleNavigation("testimonials")}>
-            Testimonials
+            {t('navigation.testimonials')}
           </button>
         </li>
         <li className={styles.item}>
@@ -59,10 +60,13 @@ function Navbar() {
             </button>
           ) : (
             <button onClick={() => navigate('/login')}>
-              Log In
+              {t('navigation.login')}
             </button>
           )}
         </li>
+        <li className={styles.item}>
+          <LanguageSwitcher />
+         </li>
       </ul>
     </div>
   );
