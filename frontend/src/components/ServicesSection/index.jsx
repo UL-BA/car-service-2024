@@ -100,9 +100,6 @@ const ServicesSection = () => {
     }
   };
   const [searchQuery, setSearchQuery] = useState("");
-
-  const { data: workshops = [], isLoading, error } = useGetWorkshopsQuery();
-
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value.toLowerCase());
   };
@@ -157,11 +154,6 @@ const ServicesSection = () => {
 
     return nameMatch || addressMatch || servicesMatch;
   });
-
-  const openFullScreenMap = () => {
-    setIsFullScreenMapOpen(true);
-  };
-
   const closeFullScreenMap = () => {
     setIsFullScreenMapOpen(false);
     if (smallMapInstance) {
