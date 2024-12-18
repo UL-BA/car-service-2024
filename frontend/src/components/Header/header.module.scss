@@ -10,13 +10,16 @@
   font-weight: normal;
   background-color: transparent;
   z-index: 1000;
- 
- 
+  transition: background-color 0.3s ease;
+
   &:hover {
     background-color: rgb(16, 16, 16);
   }
- 
- 
+
+  &.scrolled {
+    background-color: rgb(16, 16, 16);
+  }
+
   .container {
     width: 80%;
     max-width: 1600px;
@@ -24,18 +27,15 @@
     margin-left: auto;
     margin-right: auto;
   }
- }
- 
- 
- .logo {
+}
+
+.logo {
   display: flex;
   align-items: center;
   padding-bottom: 5px;
- }
- 
- 
- .logoImage {
+}
+
+.logoImage {
   height: 50px;
   width: auto;
- }
- 
+}
