@@ -31,23 +31,97 @@
   gap: 25px;
   justify-content: center;
 }
-
 .workshopItem {
-  width: 220px;
-  background: #ffffff;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
+  width: 300px; 
+  length: 300px;
+  background: linear-gradient(145deg, #d1d1d1, #f8f8f8); /* Sleek metallic effect */
+  border-radius: 12px;
+  padding: 20px;
   text-align: center;
-  color: #000;
+  color: #333;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15); /* Subtle shadow for depth */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .workshopItem:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  transform: translateY(-8px); /* Lift effect */
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2); /* Enhanced shadow */
+  background: linear-gradient(145deg, #f0f0f0, #cacaca); /* Subtle light shift */
 }
+
+.workshopItem .favoriteBtn {
+  position: absolute;
+  bottom: -15px;
+  left: 90%;
+  transform: translateX(-50%);
+  background: linear-gradient(145deg, #f4b747, #d17709); /* Metallic red button */
+  border: 1px solid #fc773a; /* Thin dark border for contrast */
+  border-radius: 50%;
+  width: 50px; /* Reduced size */
+  height: 50px; /* Reduced size */
+  bottom: 3%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2), 0 6px 15px rgba(66, 29, 5, 0.966); /* Inner glow */
+  transition: transform 0.3s ease, background 0.3s ease;
+  cursor: url('./wrench.png'), auto; /* Custom wrench cursor */
+}
+
+.workshopItem .favoriteBtn:hover {
+  transform: translateX(-50%) scale(1.1);
+  background: linear-gradient(145deg, #ff7f7f, #ff4f4f); /* Lighter metallic red */
+}
+
+.workshopItem .favoriteBtn:active {
+  transform: translateX(-50%) scale(1); /* Click feedback */
+  background: linear-gradient(145deg, #cc3a3a, #a80000); /* Deeper red on click */
+  cursor: url('./wrench.png'), auto; /* Maintain custom cursor */
+}
+
+.workshopItem .heartIcon {
+  font-size: 1.2rem;
+  color: #fff;
+  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8)); /* Subtle glow */
+}
+
+.workshopItem .workshopImage {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.2); /* Thin metallic border */
+}
+
+.workshopItem .workshopTitle {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #222;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8); /* Subtle highlight */
+  margin: 15px 0 5px;
+}
+
+.workshopItem .workshopDetails {
+  font-size: 0.9rem;
+  color: #555;
+  letter-spacing: 0.5px;
+}
+
+.item button:hover {
+  border-bottom-color: white;
+  color: white;
+  cursor: url('./wrench.png'), auto;
+}
+
+.item button:active {
+  cursor: url('./wrench.png'), auto;
+  transform: scale(0.95);
+}
+
 
 .workshopImage {
   width: 100%;
@@ -184,6 +258,12 @@
   z-index: 5;
 }
 
+  img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+  }
+
 
 
 .fullScreenButton {
@@ -195,20 +275,3 @@
   border-radius: 4px;
   cursor: pointer;
 }
-
-.favoriteBtn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 20px;
-}
-
-.heartIcon {
-  color: #ff6666;
-}
-
-.heartIcon:hover {
-  color: #ff4c4c;
-}
-
-

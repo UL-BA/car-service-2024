@@ -1,16 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 import { GoogleMap } from "@react-google-maps/api";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
+import axios from "axios";
 import styles from "./servicesSection.module.scss";
 import { useGetWorkshopsQuery } from "../../redux/features/workshopApi";
-import {
-  useGetFavoritesQuery,
-  useAddFavoriteMutation,
-  useRemoveFavoriteMutation,
-} from "../../redux/features/favoritesSlice";
+import { useGetFavoritesQuery, useAddFavoriteMutation, useRemoveFavoriteMutation } from "../../redux/features/favoritesSlice";
+import { toast } from 'react-toastify';
+import { useAuth } from '../../contexts/AuthContext';
 import config from "../../config";
-
 const GEOCODING_API_URL = `https://maps.googleapis.com/maps/api/geocode/json?key=${config.GOOGLE_MAPS_API_KEY}`;
+import favs from "../../assets/favs.png";
+import unfavs from "../../assets/unfavs.png";
 
 const AdvancedMarker = ({ map, position }) => {
   const markerRef = useRef(null);
@@ -42,56 +41,90 @@ const AdvancedMarker = ({ map, position }) => {
   return null;
 };
 
-const ServicesSection = ({ userId }) => {
+const ServicesSection = () => {
   const [selectedWorkshop, setSelectedWorkshop] = useState(null);
   const [markerPosition, setMarkerPosition] = useState({ lat: 0, lng: 0 });
   const [smallMapInstance, setSmallMapInstance] = useState(null);
   const [fullScreenMapInstance, setFullScreenMapInstance] = useState(null);
   const [isFullScreenMapOpen, setIsFullScreenMapOpen] = useState(false);
+  const [pendingFavorites, setPendingFavorites] = useState(new Set());
 
-  // Fetch workshops and user favorites
-  const { data: workshops = [], isLoading: workshopsLoading, error: workshopsError } =
-    useGetWorkshopsQuery();
-  const { data: favorites = [] } = useGetFavoritesQuery(userId);
-
+  const { user } = useAuth();
+  const { data: workshops = [], isLoading: workshopsLoading } = useGetWorkshopsQuery();
+  const { data: favorites = [] } = useGetFavoritesQuery(user?.uid);
   const [addFavorite] = useAddFavoriteMutation();
   const [removeFavorite] = useRemoveFavoriteMutation();
+
+  const toggleFavorite = async (workshop) => {
+    if (!user) {
+      toast.error("Please log in to favorite workshops");
+      return;
+    }
+  
+    console.log('Attempting to toggle favorite with:', {
+      userId: user.uid,
+      itemId: workshop._id,
+      workshop
+    });
+  
+    setPendingFavorites(prev => new Set([...prev, workshop._id]));
+  
+    try {
+      const isFavorited = favorites.some(fav => fav.itemId === workshop._id);
+      
+      if (isFavorited) {
+        const result = await removeFavorite({
+          userId: user.uid,
+          itemId: workshop._id.toString() // Ensure it's a string
+        }).unwrap();
+        console.log('Remove result:', result);
+        toast.success("Removed from favorites");
+      } else {
+        const result = await addFavorite({
+          userId: user.uid,
+          itemId: workshop._id.toString() // Ensure it's a string
+        }).unwrap();
+        console.log('Add result:', result);
+        toast.success("Added to favorites");
+      }
+    } catch (error) {
+      console.error("Error details:", error);
+      toast.error("Failed to update favorites");
+    } finally {
+      setPendingFavorites(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(workshop._id);
+        return newSet;
+      });
+    }
+  };
 
   useEffect(() => {
     if (selectedWorkshop) {
       const fetchCoordinates = async () => {
         try {
-          const response = await fetch(
-            `${GEOCODING_API_URL}&address=${selectedWorkshop.address}`
-          );
+          const response = await axios.get(GEOCODING_API_URL, {
+            params: {
+              address: selectedWorkshop.address,
+              region: "PL",
+              components: "country:PL",
+            },
+          });
 
-          const data = await response.json();
-          if (data.status === "OK" && data.results.length > 0) {
-            const location = data.results[0].geometry.location;
+          if (response.data.status === "OK" && response.data.results.length > 0) {
+            const location = response.data.results[0].geometry.location;
             setMarkerPosition({ lat: location.lat, lng: location.lng });
           } else {
-            console.error("Geocoding failed or returned ambiguous results.");
-            setMarkerPosition({ lat: 51.759, lng: 19.457 }); // Default location
+            setMarkerPosition({ lat: 51.759, lng: 19.457 });
           }
         } catch (error) {
-          console.error("Error fetching geocoding data:", error);
-          setMarkerPosition({ lat: 51.759, lng: 19.457 }); // Default location
+          setMarkerPosition({ lat: 51.759, lng: 19.457 });
         }
       };
 
       fetchCoordinates();
     }
   }, [selectedWorkshop]);
-
-  const toggleFavorite = async (workshopId) => {
-    if (favorites.some((fav) => fav.itemId === workshopId)) {
-      // Remove from favorites
-      await removeFavorite({ userId, itemId: workshopId });
-    } else {
-      // Add to favorites
-      await addFavorite({ userId, itemId: workshopId });
-    }
-  };
 
   const openPopup = (workshop) => {
     setSelectedWorkshop(workshop);
@@ -103,9 +136,7 @@ const ServicesSection = ({ userId }) => {
     setIsFullScreenMapOpen(false);
   };
 
-  const openFullScreenMap = () => {
-    setIsFullScreenMapOpen(true);
-  };
+  const openFullScreenMap = () => setIsFullScreenMapOpen(true);
 
   const closeFullScreenMap = () => {
     setIsFullScreenMapOpen(false);
@@ -114,12 +145,16 @@ const ServicesSection = ({ userId }) => {
     }
   };
 
+  if (workshopsLoading) {
+    return <div className={styles.loading}>Loading workshops...</div>;
+  }
+
   return (
     <section id="workshops" className={styles.workshopGallery}>
       <div className={styles.workshopGrid}>
         {workshops.map((workshop) => (
           <div
-            key={workshop.id}
+            key={workshop._id}
             className={styles.workshopItem}
             onClick={() => openPopup(workshop)}
           >
@@ -131,16 +166,19 @@ const ServicesSection = ({ userId }) => {
             <h4>{workshop.name}</h4>
             <p>{workshop.address}</p>
             <button
-              className={styles.favoriteBtn}
+              className={`${styles.favoriteBtn} ${pendingFavorites.has(workshop._id) ? styles.loading : ''}`}
               onClick={(e) => {
-                e.stopPropagation(); // Prevents opening the popup
-                toggleFavorite(workshop.id);
+                e.stopPropagation();
+                if (!pendingFavorites.has(workshop._id)) {
+                  toggleFavorite(workshop);
+                }
               }}
+              disabled={pendingFavorites.has(workshop._id)}
             >
-              {favorites.some((fav) => fav.itemId === workshop.id) ? (
-                <FaHeart className={styles.heartIcon} />
+              {favorites.some(fav => fav.itemId === workshop._id) ? (
+                <img src={favs} alt="Favorite" className={styles.heartIcon} />
               ) : (
-                <FaRegHeart className={styles.heartIcon} />
+                <img src={unfavs} alt="Not Favorite" className={styles.heartIcon} />
               )}
             </button>
           </div>
@@ -150,21 +188,11 @@ const ServicesSection = ({ userId }) => {
       {selectedWorkshop && (
         <div className={styles.popupOverlay}>
           <div className={styles.popupContent}>
-            <button className={styles.closeBtn} onClick={closePopup}>
-              X
-            </button>
+            <button className={styles.closeBtn} onClick={closePopup}>X</button>
             <h3>{selectedWorkshop.name}</h3>
-            <p>
-              <strong>Phone:</strong> {selectedWorkshop.phone}
-            </p>
-            <p>
-              <strong>Accepted Brands:</strong>{" "}
-              {selectedWorkshop.acceptedBrands.join(", ") || "N/A"}
-            </p>
-            <p>
-              <strong>Services:</strong>{" "}
-              {selectedWorkshop.services.join(", ") || "N/A"}
-            </p>
+            <p><strong>Phone:</strong> {selectedWorkshop.phone}</p>
+            <p><strong>Accepted Brands:</strong> {selectedWorkshop.acceptedBrands.join(", ") || "N/A"}</p>
+            <p><strong>Services:</strong> {selectedWorkshop.services.join(", ") || "N/A"}</p>
             <GoogleMap
               mapContainerStyle={{
                 width: "90%",
@@ -177,10 +205,7 @@ const ServicesSection = ({ userId }) => {
             >
               <AdvancedMarker map={smallMapInstance} position={markerPosition} />
             </GoogleMap>
-            <button
-              className={styles.fullScreenButton}
-              onClick={openFullScreenMap}
-            >
+            <button className={styles.fullScreenButton} onClick={openFullScreenMap}>
               Open Full Screen
             </button>
           </div>
@@ -190,19 +215,14 @@ const ServicesSection = ({ userId }) => {
       {isFullScreenMapOpen && selectedWorkshop && (
         <div className={styles.fullScreenMapOverlay}>
           <div className={styles.fullScreenMapContainer}>
-            <button className={styles.closeBtn} onClick={closeFullScreenMap}>
-              X
-            </button>
+            <button className={styles.closeBtn} onClick={closeFullScreenMap}>X</button>
             <GoogleMap
               mapContainerStyle={{ width: "100%", height: "100%" }}
               center={markerPosition}
               zoom={15}
               onLoad={(map) => setFullScreenMapInstance(map)}
             >
-              <AdvancedMarker
-                map={fullScreenMapInstance}
-                position={markerPosition}
-              />
+              <AdvancedMarker map={fullScreenMapInstance} position={markerPosition} />
             </GoogleMap>
           </div>
         </div>
