@@ -1,138 +1,140 @@
 .profileContainer {
-    padding: 40px;
-    margin-top: 80px;
-    min-height: calc(100vh - 80px);
-    background: linear-gradient(145deg, #1a1a1a, #2d2d2d);
-  }
-  
-  .profileCard {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 30px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 15px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-  
-  .profileHeader {
-    display: flex;
-    gap: 30px;
-    margin-bottom: 40px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  }
-  
-  .avatarContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-  }
-  
-  .avatar, .defaultAvatar {
-    width: 120px;
-    height: 120px;
-    border-radius: 60px;
-    background: linear-gradient(145deg, #f48e21, #ff7a1a);
-    padding: 3px;
-  }
-  
-  .defaultAvatar {
-    padding: 25px;
-    color: white;
-  }
-  
-  .changePhotoBtn {
-    background: transparent;
-    color: #f48e21;
-    border: 1px solid #f48e21;
-    padding: 8px 16px;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  
-    &:hover {
-      background: #f48e21;
-      color: white;
-    }
-  }
-  
-  .userInfo {
-    flex: 1;
-  }
-  
-  .nicknameInput {
-    background: transparent;
-    border: none;
-    color: white;
-    font-size: 24px;
-    font-weight: bold;
-    padding: 5px;
-    margin-bottom: 10px;
-    border-bottom: 2px solid transparent;
-    transition: all 0.3s ease;
-  
-    &:focus {
-      outline: none;
-      border-bottom-color: #f48e21;
-    }
-  }
-  
-  .email {
-    color: #888;
-    font-size: 16px;
-  }
-  
-  .favoritesSection {
-    margin-top: 30px;
-    
-    h3 {
-      color: white;
-      margin-bottom: 20px;
-    }
-  }
-  
-  .favoritesList {
-    min-height: 200px;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
-    padding: 20px;
-  }
-  
-  .noFavorites {
-    color: #888;
-    text-align: center;
-    padding: 20px;
-  }
+  display: flex;  
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  min-height: calc(100vh - 80px);
+  background: linear-gradient(145deg, #1a1a1a, #2d2d2d);
+}
 
-  .btnContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-  }
+.profileCard {
+  width: 800px;
+  margin: 0 auto;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
 
-  .btn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+.profileHeader {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
   
-  .logoutBtn {
-    margin-top: 30px;
-    width: 40%;
-    padding: 12px;
-    background: linear-gradient(145deg, #f48e21, #ff7a1a);
-    border: none;
-    border-radius: 8px;
+.avatarContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+  
+.avatar, .defaultAvatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 60px;
+  background: linear-gradient(145deg, #f48e21, #ff7a1a);
+  padding: 3px;
+}
+  
+.defaultAvatar {
+  padding: 25px;
+  color: white;
+}
+
+.changePhotoBtn {
+  background: transparent;
+  color: #f48e21;
+  border: 1px solid #f48e21;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: #f48e21;
     color: white;
-    font-size: 16px;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-  
-    &:hover {
-      transform: translateY(-2px);
-    }
   }
+}
+
+.userInfo {
+  flex: 1;
+}
+
+.nicknameInput {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  padding: 5px;
+  margin-bottom: 10px;
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-bottom-color: #f48e21;
+  }
+}
+
+.email {
+  color: #888;
+  font-size: 16px;
+}
+
+.favoritesSection {
+  margin-top: 30px;
+  
+  h3 {
+    color: white;
+    margin-bottom: 20px;
+  }
+}
+
+.favoritesList {
+  min-height: 200px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.noFavorites {
+  color: #888;
+  text-align: center;
+  padding: 20px;
+}
+
+.btnContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logoutBtn {
+  margin-top: 30px;
+  width: 40%;
+  padding: 12px;
+  background: linear-gradient(145deg, #f48e21, #ff7a1a);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
