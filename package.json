@@ -1,6 +1,8 @@
 {
   "dependencies": {
     "@react-google-maps/api": "^2.20.3",
-    "axios": "^1.7.9"
+    "axios": "^1.7.9",
+    "react-i18next": "^15.2.0",
+    "react-toastify": "^10.0.6"
   }
 }
