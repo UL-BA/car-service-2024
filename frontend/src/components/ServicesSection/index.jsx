@@ -65,6 +65,7 @@ const ServicesSection = () => {
       userId: user.uid,
       itemId: workshop._id,
       workshop
+ 
     });
   
     setPendingFavorites(prev => new Set([...prev, workshop._id]));
@@ -98,6 +99,13 @@ const ServicesSection = () => {
       });
     }
   };
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const { data: workshops = [], isLoading, error } = useGetWorkshopsQuery();
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value.toLowerCase());
+  };
 
   useEffect(() => {
     if (selectedWorkshop) {
@@ -111,7 +119,10 @@ const ServicesSection = () => {
             },
           });
 
-          if (response.data.status === "OK" && response.data.results.length > 0) {
+          if (
+            response.data.status === "OK" &&
+            response.data.results.length > 0
+          ) {
             const location = response.data.results[0].geometry.location;
             setMarkerPosition({ lat: location.lat, lng: location.lng });
           } else {
@@ -137,6 +148,19 @@ const ServicesSection = () => {
   };
 
   const openFullScreenMap = () => setIsFullScreenMapOpen(true);
+  const filteredWorkshops = workshops.filter((workshop) => {
+    const nameMatch = workshop.name?.toLowerCase().includes(searchQuery);
+    const addressMatch = workshop.address?.toLowerCase().includes(searchQuery);
+    const servicesMatch = workshop.services?.some((service) =>
+      service?.toLowerCase().includes(searchQuery)
+    );
+
+    return nameMatch || addressMatch || servicesMatch;
+  });
+
+  const openFullScreenMap = () => {
+    setIsFullScreenMapOpen(true);
+  };
 
   const closeFullScreenMap = () => {
     setIsFullScreenMapOpen(false);
@@ -151,8 +175,17 @@ const ServicesSection = () => {
 
   return (
     <section id="workshops" className={styles.workshopGallery}>
+      <div className={styles.searchContainer}>
+        <input
+          type="text"
+          placeholder="Search by workshop name, location, or services..."
+          value={searchQuery}
+          onChange={handleSearchChange}
+          className={styles.searchInput}
+        />
+      </div>
       <div className={styles.workshopGrid}>
-        {workshops.map((workshop) => (
+        {filteredWorkshops.map((workshop) => (
           <div
             key={workshop._id}
             className={styles.workshopItem}
@@ -203,7 +236,10 @@ const ServicesSection = () => {
               zoom={15}
               onLoad={(map) => setSmallMapInstance(map)}
             >
-              <AdvancedMarker map={smallMapInstance} position={markerPosition} />
+              <AdvancedMarker
+                map={smallMapInstance}
+                position={markerPosition}
+              />
             </GoogleMap>
             <button className={styles.fullScreenButton} onClick={openFullScreenMap}>
               Open Full Screen
