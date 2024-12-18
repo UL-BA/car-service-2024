@@ -195,3 +195,19 @@
   border-radius: 4px;
   cursor: pointer;
 }
+
+.searchInput {
+  width: 80%;
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  color: #000;
+  background-color: #fff;
+
+  &:focus {
+    border-color: #f48e21;
+  }
+}
+
