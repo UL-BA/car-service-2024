@@ -1,21 +1,35 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .container {
-  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(145deg, #1a1a1a, #2d2d2d);
-  padding: 20px;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  background: #4c4c4d;
+  z-index: 0;
+  position: relative; /* Ensure proper stacking */
+  overflow: visible; /* Allow interactions */
 }
 
 .formCard {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgb(35, 34, 34);
   backdrop-filter: blur(10px);
   padding: 40px;
   border-radius: 20px;
   width: 100%;
   max-width: 400px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgb(27, 26, 26);
+  z-index: 1000000;
+
 }
 
 h2 {
@@ -35,6 +49,7 @@ h2 {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  z-index: 1000000;
 }
 
 .inputGroup {
@@ -51,6 +66,7 @@ input {
   background: rgba(255, 255, 255, 0.05);
   color: white;
   transition: all 0.3s ease;
+  z-index: 1000000;
 
   &::placeholder {
     color: #888;
@@ -108,12 +124,6 @@ input {
 
   &::after {
     right: 0;
-  }
-
-  span {
-    background: #1a1a1a;
-    color: #888;
-    padding: 0 10px;
   }
 }
 
@@ -195,4 +205,63 @@ input {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+$particleSize: 50vmin;
+$animationDuration: 6s;
+$amount: 15;
+.container .background span {
+  width: $particleSize;
+  height: $particleSize;
+  border-radius: $particleSize;
+  backface-visibility: hidden;
+  position: absolute;
+  animation-name: move;
+  animation-duration: $animationDuration;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+
+  $colors: (
+    #f79b38,
+    // #E45A84,
+    // #FFACAC
+  );
+  @for $i from 1 through $amount {
+    &:nth-child(#{$i}) {
+      color: nth($colors, random(length($colors)));
+      top: random(100) * 1%;
+      left: random(100) * 1%;
+      animation-duration: (random($animationDuration * 10) / 10) * 1s + 10s;
+      animation-delay: random(($animationDuration + 10s) * 10) / 10 * -1s;
+      transform-origin: (random(50) - 25) * 1vw (random(50) - 25) * 1vh;
+      $blurRadius: (random() + 0.5) * $particleSize * 0.5;
+      $x: if(random() > 0.5, -1, 1);
+      box-shadow: ($particleSize * 2 * $x) 0 $blurRadius currentColor;
+    }
+  }
+}
+
+@keyframes move {
+  100% {
+    transform: translate3d(0, 0, 1px) rotate(360deg);
+  }
+}
+
+
+// .formCard {
+//   background: rgb(35, 34, 34);
+//   backdrop-filter: blur(10px);
+//   padding: 40px;
+//   border-radius: 20px;
+//   width: 100%;
+//   max-width: 400px;
+//   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+//   border: 1px solid rgb(27, 26, 26);
+//   z-index: 10;
+//   position: relative;
+// }
+
+.background span {
+  z-index: 1;
+  pointer-events: none; /* Ensure background doesn't block interactions */
 }
