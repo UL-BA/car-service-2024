@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./mainSection.module.scss";
 import { useTranslation } from "react-i18next";
-import video from "../../assets/3486737129-preview.mp4";
+import video from "../../assets/car.mp4";
 
 function MainSection() {
   const { t } = useTranslation();
