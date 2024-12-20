@@ -5,8 +5,6 @@ const AdvancedMarker = ({ map, position }) => {
 
   useEffect(() => {
     if (!map || !position) return;
-
-    // If the marker doesn't exist, create it
     if (!markerRef.current) {
       markerRef.current = new google.maps.Marker({
         position,

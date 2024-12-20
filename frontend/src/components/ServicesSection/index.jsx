@@ -12,7 +12,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import config from "../../config";
 import favs from "../../assets/favs.png";
 import unfavs from "../../assets/unfavs.png";
-import Notification from "../message/index";
+import Notification from "./message/index";
 import AdvancedMarker from "./marker";
 import { useTranslation } from "react-i18next";
 
@@ -71,8 +71,8 @@ const ServicesSection = () => {
       }
 
       refetchFavorites();
-    } catch (error) {
-      setNotificationMessage("Failed to update favorites");
+    } catch {
+      setNotificationMessage("Item already in favorites");
     } finally {
       setPendingFavorites((prev) => {
         const newSet = new Set(prev);

@@ -1,3 +1,4 @@
+const { messaging } = require("firebase-admin");
 const Favorite = require("./favorite.model");
 
 // Get all favorites for a user
@@ -30,7 +31,7 @@ const addFavorite = async (req, res) => {
   try {
     const existingFavorite = await Favorite.findOne({ userId, itemId });
     if (existingFavorite) {
-      return res.status(400).json({ error: "Item already in favorites" });
+      return res.status(400).json({ message: "Item already in favorites" });
     }
 
     const favorite = new Favorite({ userId, itemId });
@@ -38,7 +39,7 @@ const addFavorite = async (req, res) => {
     res.status(201).json(favorite);
   } catch (error) {
     console.error("Error adding favorite:", error);
-    res.status(500).json({ error: "Failed to add favorite" });
+    res.status(500).json({ message: "Failed to add favorite" });
   }
 };
 
