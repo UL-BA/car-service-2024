@@ -1,76 +1,41 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { GoogleMap } from "@react-google-maps/api";
 import axios from "axios";
 import styles from "./servicesSection.module.scss";
 import { useGetWorkshopsQuery } from "../../redux/features/workshopApi";
-import {
-  useGetFavoritesQuery,
-  useAddFavoriteMutation,
-  useRemoveFavoriteMutation,
-} from "../../redux/features/favoritesSlice";
-import { toast } from "react-toastify";
+import { useGetFavoritesQuery, useAddFavoriteMutation, useRemoveFavoriteMutation } from "../../redux/features/favoritesSlice";
 import { useAuth } from "../../contexts/AuthContext";
 import config from "../../config";
-const GEOCODING_API_URL = `https://maps.googleapis.com/maps/api/geocode/json?key=${config.GOOGLE_MAPS_API_KEY}`;
 import favs from "../../assets/favs.png";
 import unfavs from "../../assets/unfavs.png";
+import Notification from "../message/index";
+import AdvancedMarker from "./marker";
 
-const AdvancedMarker = ({ map, position }) => {
-  const markerRef = useRef(null);
-
-  useEffect(() => {
-    if (!map || !position) return;
-
-    if (!markerRef.current) {
-      markerRef.current = new google.maps.Marker({
-        position,
-        map,
-        icon: {
-          url: "/src/assets/custom-marker.png",
-          scaledSize: new google.maps.Size(40, 40),
-        },
-      });
-    } else {
-      markerRef.current.setPosition(position);
-      markerRef.current.setMap(map);
-    }
-
-    return () => {
-      if (markerRef.current) {
-        markerRef.current.setMap(null);
-      }
-    };
-  }, [map, position]);
-
-  return null;
-};
+const GEOCODING_API_URL = `https://maps.googleapis.com/maps/api/geocode/json?key=${config.GOOGLE_MAPS_API_KEY}`;
 
 const ServicesSection = () => {
+  const [pendingFavorites, setPendingFavorites] = useState(new Set());
+  const [notificationMessage, setNotificationMessage] = useState("");
   const [selectedWorkshop, setSelectedWorkshop] = useState(null);
   const [markerPosition, setMarkerPosition] = useState({ lat: 0, lng: 0 });
   const [smallMapInstance, setSmallMapInstance] = useState(null);
   const [fullScreenMapInstance, setFullScreenMapInstance] = useState(null);
   const [isFullScreenMapOpen, setIsFullScreenMapOpen] = useState(false);
-  const [pendingFavorites, setPendingFavorites] = useState(new Set());
+  const [searchQuery, setSearchQuery] = useState("");
 
   const { user } = useAuth();
-  const { data: workshops = [], isLoading: workshopsLoading } =
-    useGetWorkshopsQuery();
-  const { data: favorites = [] } = useGetFavoritesQuery(user?.uid);
+  const { data: workshops = [], isLoading: workshopsLoading } = useGetWorkshopsQuery();
+  const { data: favorites = [], refetch: refetchFavorites } = useGetFavoritesQuery(user?.uid);
   const [addFavorite] = useAddFavoriteMutation();
   const [removeFavorite] = useRemoveFavoriteMutation();
 
+  const handleSearchChange = (event) => setSearchQuery(event.target.value.toLowerCase());
+
   const toggleFavorite = async (workshop) => {
     if (!user) {
-      toast.error("Please log in to favorite workshops");
+      setNotificationMessage("Please log in to favorite workshops");
       return;
     }
-
-    console.log("Attempting to toggle favorite with:", {
-      userId: user.uid,
-      itemId: workshop._id,
-      workshop,
-    });
 
     setPendingFavorites((prev) => new Set([...prev, workshop._id]));
 
@@ -78,23 +43,21 @@ const ServicesSection = () => {
       const isFavorited = favorites.some((fav) => fav.itemId === workshop._id);
 
       if (isFavorited) {
-        const result = await removeFavorite({
-          userId: user.uid,
-          itemId: workshop._id.toString(),
-        }).unwrap();
-        console.log("Remove result:", result);
-        toast.success("Removed from favorites");
+        await removeFavorite({ userId: user.uid, itemId: workshop._id.toString() }).unwrap();
+        setNotificationMessage("Removed from favorites");
       } else {
-        const result = await addFavorite({
-          userId: user.uid,
-          itemId: workshop._id.toString(),
-        }).unwrap();
-        console.log("Add result:", result);
-        toast.success("Added to favorites");
+        const result = await addFavorite({ userId: user.uid, itemId: workshop._id.toString() }).unwrap();
+
+        if (result.message === "Item already in favorites") {
+          setNotificationMessage("This item is already in your favorites");
+        } else {
+          setNotificationMessage("Added to favorites");
+        }
       }
+
+      refetchFavorites();
     } catch (error) {
-      console.error("Error details:", error);
-      toast.error("Failed to update favorites");
+      setNotificationMessage("Failed to update favorites");
     } finally {
       setPendingFavorites((prev) => {
         const newSet = new Set(prev);
@@ -103,40 +66,37 @@ const ServicesSection = () => {
       });
     }
   };
-  const [searchQuery, setSearchQuery] = useState("");
-  const handleSearchChange = (event) => {
-    setSearchQuery(event.target.value.toLowerCase());
-  };
 
   useEffect(() => {
     if (selectedWorkshop) {
       const fetchCoordinates = async () => {
         try {
           const response = await axios.get(GEOCODING_API_URL, {
-            params: {
-              address: selectedWorkshop.address,
-              region: "PL",
-              components: "country:PL",
-            },
+            params: { address: selectedWorkshop.address, region: "PL" },
           });
-
-          if (
-            response.data.status === "OK" &&
-            response.data.results.length > 0
-          ) {
-            const location = response.data.results[0].geometry.location;
-            setMarkerPosition({ lat: location.lat, lng: location.lng });
-          } else {
-            setMarkerPosition({ lat: 51.759, lng: 19.457 });
-          }
-        } catch (error) {
+          const location = response.data.results[0]?.geometry.location;
+          setMarkerPosition(location || { lat: 51.759, lng: 19.457 });
+        } catch {
           setMarkerPosition({ lat: 51.759, lng: 19.457 });
         }
       };
-
       fetchCoordinates();
     }
   }, [selectedWorkshop]);
+
+  const filteredWorkshops = workshops.filter((workshop) => {
+    const nameMatch = workshop.name?.toLowerCase().includes(searchQuery);
+    const addressMatch = workshop.address?.toLowerCase().includes(searchQuery);
+    const servicesMatch = workshop.services?.some((service) =>
+      service?.toLowerCase().includes(searchQuery)
+    );
+
+    return nameMatch || addressMatch || servicesMatch;
+  });
+
+  if (workshopsLoading) {
+    return <div className={styles.loading}>Loading workshops...</div>;
+  }
 
   const openPopup = (workshop) => {
     setSelectedWorkshop(workshop);
@@ -149,25 +109,12 @@ const ServicesSection = () => {
   };
 
   const openFullScreenMap = () => setIsFullScreenMapOpen(true);
-  const filteredWorkshops = workshops.filter((workshop) => {
-    const nameMatch = workshop.name?.toLowerCase().includes(searchQuery);
-    const addressMatch = workshop.address?.toLowerCase().includes(searchQuery);
-    const servicesMatch = workshop.services?.some((service) =>
-      service?.toLowerCase().includes(searchQuery)
-    );
-
-    return nameMatch || addressMatch || servicesMatch;
-  });
   const closeFullScreenMap = () => {
     setIsFullScreenMapOpen(false);
     if (smallMapInstance) {
       smallMapInstance.panTo(markerPosition);
     }
   };
-
-  if (workshopsLoading) {
-    return <div className={styles.loading}>Loading workshops...</div>;
-  }
 
   return (
     <section id="workshops" className={styles.workshopGallery}>
@@ -286,6 +233,9 @@ const ServicesSection = () => {
             </GoogleMap>
           </div>
         </div>
+      )}
+      {notificationMessage && (
+        <Notification message={notificationMessage} onClose={() => setNotificationMessage("")} />
       )}
     </section>
   );
