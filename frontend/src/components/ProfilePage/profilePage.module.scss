@@ -1,5 +1,5 @@
 .profileContainer {
-  display: flex;  
+  display: flex;
   justify-content: center;
   align-items: center;
   padding: 40px;
@@ -27,14 +27,14 @@
   padding-bottom: 20px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
-  
+
 .avatarContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
 }
-  
+
 .avatar, .defaultAvatar {
   width: 120px;
   height: 120px;
@@ -42,10 +42,13 @@
   background: linear-gradient(145deg, #f48e21, #ff7a1a);
   padding: 3px;
 }
-  
+
 .defaultAvatar {
-  padding: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   color: white;
+  font-size: 18px;
 }
 
 .changePhotoBtn {
@@ -143,8 +146,8 @@
 
 .favoritesList {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Two cards per row */
-  gap: 15px; /* Space between cards */
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
   justify-content: center;
   align-items: stretch;
   padding: 20px;
@@ -159,37 +162,37 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    max-width: 300px; /* Restrict the card width */
-    margin: auto; /* Center-align cards */
+    max-width: 300px;
+    margin: auto;
   }
 
 .favoriteCard:hover {
-  transform: translateY(-5px); /* Lift effect */
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
 
 .cardImage {
   width: 100%;
-  height: 120px; /* Smaller image height */
-  object-fit: cover; /* Crop image to fit */
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Separator line */
+  height: 120px;
+  object-fit: cover;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .cardContent {
-  padding: 10px; /* Reduced padding */
-  text-align: center; /* Center-align text */
+  padding: 10px;
+  text-align: center;
 }
 
 .cardTitle {
-  font-size: 1rem; /* Slightly smaller title */
+  font-size: 1rem;
   font-weight: bold;
-  color: #333; /* Dark text */
+  color: #333;
   margin-bottom: 5px;
 }
 
 .cardAddress {
-  font-size: 0.8rem; /* Smaller font */
-  color: #555; /* Muted text */
+  font-size: 0.8rem;
+  color: #555;
 }
 
 .cardButton {
@@ -197,22 +200,21 @@
   margin: 8px auto;
   border: none;
   border-radius: 5px;
-  background-color: #f48e21; /* Bright orange */
+  background-color: #f48e21;
   color: white;
-  font-size: 0.85rem; /* Slightly smaller font */
+  font-size: 0.85rem;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .cardButton:hover {
-  background-color: #ff7a1a; /* Lighter orange */
-  transform: scale(1.05); /* Slight zoom on hover */
+  background-color: #ff7a1a;
+  transform: scale(1.05);
 }
 
 .noFavorites {
   text-align: center;
-  color: #888; /* Muted text for empty state */
+  color: #888;
   font-size: 1rem;
   padding: 20px;
 }
-
