@@ -1,0 +1,70 @@
+.cardContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 2fr));
+    /* Two columns on larger screens, one column on smaller */
+    gap: 20px;
+    /* Space between the cards */
+    padding: 20px;
+    /* Padding around the container */
+}
+
+.favoriteCard {
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.favoriteCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.cardImage {
+    width: 100%;
+    height: 140px;
+    /* Smaller height for images */
+    object-fit: cover;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.cardContent {
+    padding: 10px;
+    text-align: center;
+}
+
+.cardTitle {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.cardAddress {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.phone {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.removeButton {
+    padding: 8px 12px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #dc3545; /* Red button */
+    color: white;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .removeButton:hover {
+    background-color: #a71d2a; /* Darker red */
+    transform: scale(1.05); /* Slight zoom on hover */
+  }
+  
