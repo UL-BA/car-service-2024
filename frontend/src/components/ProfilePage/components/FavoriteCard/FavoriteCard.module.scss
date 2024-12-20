@@ -1,19 +1,16 @@
-.cardContainer {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 2fr));
-    /* Two columns on larger screens, one column on smaller */
-    gap: 20px;
-    /* Space between the cards */
-    padding: 20px;
-    /* Padding around the container */
-}
-
 .favoriteCard {
     background: #ffffff;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+    padding: 10px;
 }
 
 .favoriteCard:hover {
@@ -24,47 +21,56 @@
 .cardImage {
     width: 100%;
     height: 140px;
-    /* Smaller height for images */
     object-fit: cover;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .cardContent {
-    padding: 10px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     text-align: center;
+    padding: 10px;
+    width: 100%;
 }
 
 .cardTitle {
     font-size: 1.1rem;
     font-weight: bold;
     color: #333;
-    margin-bottom: 5px;
+    margin-bottom: -3px;
 }
 
 .cardAddress {
     font-size: 0.9rem;
     color: #555;
+    margin-bottom: 3px;
 }
 
-.phone {
+.cardPhone {
     font-size: 0.9rem;
     color: #555;
+    margin-bottom: 3px;
 }
 
 .removeButton {
+    margin-top: auto;
     padding: 8px 12px;
-    margin-top: 10px;
     border: none;
     border-radius: 5px;
-    background-color: #dc3545; /* Red button */
+    background-color: #dc3545;
     color: white;
     font-size: 0.85rem;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
-  }
-  
-  .removeButton:hover {
-    background-color: #a71d2a; /* Darker red */
-    transform: scale(1.05); /* Slight zoom on hover */
-  }
-  
+    width: calc(100% - 20px); 
+    max-width: 120px; 
+    text-align: center;
+    align-self: center; 
+}
+
+.removeButton:hover {
+    background-color: #a71d2a;
+    transform: scale(1.05);
+}
