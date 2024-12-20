@@ -14,7 +14,7 @@ const favoriteRoutes = require("./src/favorite/favorite.route");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "images/");
+    cb(null, "userPhoto/");
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname));
@@ -35,11 +35,11 @@ app.use("/api/users", userRoutes);
 app.use("/api/workshop", workshopRoutes);
 app.use("/api/favorites", favoriteRoutes);
 
-app.use("/images", express.static("images"));
+app.use("/userPhoto", express.static("userPhoto"));
 
 app.post("/upload", upload.single("profilePhoto"), async (req, res) => {
   if (req.file) {
-    const fileUrl = `http://localhost:3000/images/${req.file.filename}`;
+    const fileUrl = `http://localhost:3000/userPhoto/${req.file.filename}`;
     const email = req.body.email;
 
     try {
