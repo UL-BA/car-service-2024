@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import styles from "./ProfilePage.module.scss";
+import styles from "./profilePage.module.scss";
 import { auth } from "../../firebase/firebase.config";
 import { signOut, updateProfile } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
