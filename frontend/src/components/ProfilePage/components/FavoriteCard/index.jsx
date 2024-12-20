@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./FavoriteCard.module.scss";
 
 const FavoriteCard = ({ favorite, onRemoveFavorite }) => {
-  const { name, address, id } = favorite.itemId;
+  const { name, address, phone, id } = favorite.itemId;
 
   return (
     <div className={styles.favoriteCard}>
@@ -10,6 +10,11 @@ const FavoriteCard = ({ favorite, onRemoveFavorite }) => {
       <div className={styles.cardContent}>
         <h4 className={styles.cardTitle}>{name || "No Name"}</h4>
         <p className={styles.cardAddress}>{address || "No Address"}</p>
+        {phone && (
+          <p className={styles.cardPhone}>
+            <strong>Phone:</strong> {phone}
+          </p>
+        )}
         <button
           className={styles.removeButton}
           onClick={() => onRemoveFavorite(favorite.itemId)}
