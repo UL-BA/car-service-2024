@@ -3,13 +3,18 @@ import { GoogleMap } from "@react-google-maps/api";
 import axios from "axios";
 import styles from "./servicesSection.module.scss";
 import { useGetWorkshopsQuery } from "../../redux/features/workshopApi";
-import { useGetFavoritesQuery, useAddFavoriteMutation, useRemoveFavoriteMutation } from "../../redux/features/favoritesSlice";
+import {
+  useGetFavoritesQuery,
+  useAddFavoriteMutation,
+  useRemoveFavoriteMutation,
+} from "../../redux/features/favoritesSlice";
 import { useAuth } from "../../contexts/AuthContext";
 import config from "../../config";
 import favs from "../../assets/favs.png";
 import unfavs from "../../assets/unfavs.png";
 import Notification from "../message/index";
 import AdvancedMarker from "./marker";
+import { useTranslation } from "react-i18next";
 
 const GEOCODING_API_URL = `https://maps.googleapis.com/maps/api/geocode/json?key=${config.GOOGLE_MAPS_API_KEY}`;
 
@@ -24,12 +29,16 @@ const ServicesSection = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const { user } = useAuth();
-  const { data: workshops = [], isLoading: workshopsLoading } = useGetWorkshopsQuery();
-  const { data: favorites = [], refetch: refetchFavorites } = useGetFavoritesQuery(user?.uid);
+  const { data: workshops = [], isLoading: workshopsLoading } =
+    useGetWorkshopsQuery();
+  const { data: favorites = [], refetch: refetchFavorites } =
+    useGetFavoritesQuery(user?.uid);
   const [addFavorite] = useAddFavoriteMutation();
   const [removeFavorite] = useRemoveFavoriteMutation();
+  const { t } = useTranslation();
 
-  const handleSearchChange = (event) => setSearchQuery(event.target.value.toLowerCase());
+  const handleSearchChange = (event) =>
+    setSearchQuery(event.target.value.toLowerCase());
 
   const toggleFavorite = async (workshop) => {
     if (!user) {
@@ -43,10 +52,16 @@ const ServicesSection = () => {
       const isFavorited = favorites.some((fav) => fav.itemId === workshop._id);
 
       if (isFavorited) {
-        await removeFavorite({ userId: user.uid, itemId: workshop._id.toString() }).unwrap();
+        await removeFavorite({
+          userId: user.uid,
+          itemId: workshop._id.toString(),
+        }).unwrap();
         setNotificationMessage("Removed from favorites");
       } else {
-        const result = await addFavorite({ userId: user.uid, itemId: workshop._id.toString() }).unwrap();
+        const result = await addFavorite({
+          userId: user.uid,
+          itemId: workshop._id.toString(),
+        }).unwrap();
 
         if (result.message === "Item already in favorites") {
           setNotificationMessage("This item is already in your favorites");
@@ -121,7 +136,7 @@ const ServicesSection = () => {
       <div className={styles.searchContainer}>
         <input
           type="text"
-          placeholder="Search by workshop name, location, or services..."
+          placeholder={t("workshops.search")}
           value={searchQuery}
           onChange={handleSearchChange}
           className={styles.searchInput}
@@ -169,45 +184,48 @@ const ServicesSection = () => {
 
       {selectedWorkshop && (
         <div className={styles.popupOverlay} onClick={closePopup}>
-          <div className={styles.popupContent} onClick={(e) => e.stopPropagation()}>
+          <div
+            className={styles.popupContent}
+            onClick={(e) => e.stopPropagation()}
+          >
             <button className={styles.closeBtn} onClick={closePopup}>
               X
             </button>
             <h3>{selectedWorkshop.name}</h3>
             <p>
-              <strong>Phone:</strong> {selectedWorkshop.phone}
+              <strong>{t("workshops.phone")}</strong> {selectedWorkshop.phone}
             </p>
             <p>
-              <strong>Accepted Brands:</strong>{" "}
+              <strong>{t("workshops.acceptedBrands")}</strong>{" "}
               {selectedWorkshop.acceptedBrands.join(", ") || "N/A"}
             </p>
             <p>
-              <strong>Services:</strong>{" "}
+              <strong>{t("workshops.services")}</strong>{" "}
               {selectedWorkshop.services.join(", ") || "N/A"}
             </p>
             <div className={styles.mapContainer}>
-            <GoogleMap
-              mapContainerStyle={{
-                width: "100%",
-                height: "250px",
-                // margin: "0 auto",
-              }}
-              center={markerPosition}
-              zoom={15}
-              onLoad={(map) => setSmallMapInstance(map)}
-            >
-              <AdvancedMarker
-                map={smallMapInstance}
-                position={markerPosition}
-              />
-            </GoogleMap>
+              <GoogleMap
+                mapContainerStyle={{
+                  width: "100%",
+                  height: "250px",
+                  // margin: "0 auto",
+                }}
+                center={markerPosition}
+                zoom={15}
+                onLoad={(map) => setSmallMapInstance(map)}
+              >
+                <AdvancedMarker
+                  map={smallMapInstance}
+                  position={markerPosition}
+                />
+              </GoogleMap>
             </div>
             <div className={styles.buttonContainer}>
               <button
                 className={styles.fullScreenButton}
                 onClick={openFullScreenMap}
               >
-                Open Full Screen
+                {t("workshops.openFullScreen")}
               </button>
             </div>
           </div>
@@ -235,7 +253,10 @@ const ServicesSection = () => {
         </div>
       )}
       {notificationMessage && (
-        <Notification message={notificationMessage} onClose={() => setNotificationMessage("")} />
+        <Notification
+          message={notificationMessage}
+          onClose={() => setNotificationMessage("")}
+        />
       )}
     </section>
   );

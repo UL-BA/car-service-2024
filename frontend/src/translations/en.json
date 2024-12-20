@@ -32,9 +32,10 @@
     "workshops": {
       "search": "Search by workshop name, location, or services...",
       "noResults": "No workshops found.",
-      "acceptedBrands": "Accepted Car Brands",
-      "services": "Services Provided",
-      "paymentMethods": "Payment Methods",
-      "phone": "Phone"
+      "acceptedBrands": "Accepted Car Brands: ",
+      "services": "Services Provided: ",
+      "paymentMethods": "Payment Methods: ",
+      "phone": "Phone: ",
+      "openFullScreen": "Open Full Screen"
     }
   }
