@@ -32,9 +32,10 @@
     "workshops": {
       "search": "Szukaj po nazwie warsztatu, lokalizacji lub usługach...",
       "noResults": "Nie znaleziono warsztatów.",
-      "acceptedBrands": "Obsługiwane marki",
-      "services": "Dostępne usługi",
-      "paymentMethods": "Metody płatności",
-      "phone": "Telefon"
+      "acceptedBrands": "Obsługiwane marki: ",
+      "services": "Dostępne usługi: ",
+      "paymentMethods": "Metody płatności: ",
+      "phone": "Telefon: ",
+      "openFullScreen": "Otwórz pełny ekran"
     }
   }
