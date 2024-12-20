@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./ProfilePage.module.scss";
 import { auth } from "../../firebase/firebase.config";
-import { signOut } from "firebase/auth";
+import { signOut, updateProfile } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { FaUser } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
@@ -31,7 +31,7 @@ const ProfilePage = () => {
 
         try {
           const response = await axios.get(
-            `http://localhost:3000/api/users/${user.email}`,
+            `http://localhost:3000/api/users/${user.email}`
           );
 
           if (response.data.profilePhoto) {
@@ -79,20 +79,33 @@ const ProfilePage = () => {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        },
+        }
       );
       console.log("Upload successful:", response.data);
       setPhotoUrl(response.data.photoUrl);
     } catch (error) {
       console.error(
         "Upload failed:",
-        error.response ? error.response.data : error.message,
+        error.response ? error.response.data : error.message
       );
     }
   };
 
   const triggerFileInput = () => {
     document.getElementById("fileInput").click();
+  };
+
+  const handleNicknameChange = async () => {
+    if (auth.currentUser) {
+      try {
+        await updateProfile(auth.currentUser, {
+          displayName: nickname,
+        });
+        console.log("Nickname updated successfully in Firebase Authentication");
+      } catch (error) {
+        console.error("Error updating nickname:", error);
+      }
+    }
   };
 
   const handleLogout = async () => {
@@ -134,6 +147,7 @@ const ProfilePage = () => {
               type="text"
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
+              onBlur={handleNicknameChange}
               className={styles.nicknameInput}
               placeholder="Enter your nickname"
             />
