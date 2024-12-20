@@ -1,11 +1,10 @@
 /* Workshop Gallery Styling */
 .workshopGallery {
   padding: 40px;
-  background: #ffffff/* Sleek metallic effect */
-  
+  background: #ffffff;
+  font-family: 'Roboto', sans-serif;
 }
 
-/* Search Container */
 .searchContainer {
   margin-bottom: 30px;
   text-align: center;
@@ -46,21 +45,21 @@
 .workshopItem {
   width: 300px; 
   height: 400px;
-  background: linear-gradient(145deg, #d1d1d1, #f8f8f8); /* Sleek metallic effect */
+  background: linear-gradient(145deg, #d1d1d1, #f8f8f8);
   border-radius: 12px;
   padding: 20px;
   text-align: center;
   color: #333;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15); /* Subtle shadow for depth */
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .workshopItem:hover {
-  transform: translateY(-8px); /* Lift effect */
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2); /* Enhanced shadow */
-  background: linear-gradient(145deg, #fa8d10, #ecd466); /* Sleek metallic effect */
+  transform: translateY(-8px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(145deg, #fa8d10, #ecd466);
   cursor: url('./wrench.png'), auto;
 }
 
@@ -69,36 +68,36 @@
   bottom: -15px;
   left: 90%;
   transform: translateX(-50%);
-  background: linear-gradient(145deg, #f4b747, #d17709); /* Metallic red button */
-  border: 1px solid #fc773a; /* Thin dark border for contrast */
+  background: linear-gradient(145deg, #f4b747, #d17709);
+  border: 1px solid #fc773a;
   border-radius: 50%;
-  width: 50px; /* Reduced size */
-  height: 50px; /* Reduced size */
+  width: 50px;
+  height: 50px;
   bottom: 3%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
-  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2), 0 6px 15px rgba(66, 29, 5, 0.966); /* Inner glow */
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2), 0 6px 15px rgba(66, 29, 5, 0.966);
   transition: transform 0.3s ease, background 0.3s ease;
-  cursor: url('./wrench.png'), auto; /* Custom wrench cursor */
+  cursor: url('./wrench.png'), auto;
 }
 
 .workshopItem .favoriteBtn:hover {
   transform: translateX(-50%) scale(1.1);
-  background: linear-gradient(145deg, #ff7f7f, #ff4f4f); /* Lighter metallic red */
+  background: linear-gradient(145deg, #ff7f7f, #ff4f4f);
 }
 
 .workshopItem .favoriteBtn:active {
-  transform: translateX(-50%) scale(1); /* Click feedback */
-  background: linear-gradient(145deg, #cc3a3a, #a80000); /* Deeper red on click */
-  cursor: url('./wrench.png'), auto; /* Maintain custom cursor */
+  transform: translateX(-50%) scale(1);
+  background: linear-gradient(145deg, #cc3a3a, #a80000);
+  cursor: url('./wrench.png'), auto;
 }
 
 .workshopItem .heartIcon {
   font-size: 1.2rem;
   color: #fff;
-  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8)); /* Subtle glow */
+  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8));
 }
 
 .workshopItem .workshopImage {
@@ -107,14 +106,14 @@
   object-fit: cover;
   border-radius: 8px;
   margin-bottom: 10px;
-  border: 2px solid rgba(255, 255, 255, 0.2); /* Thin metallic border */
+  border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 .workshopItem .workshopTitle {
   font-size: 1.3rem;
   font-weight: bold;
   color: #222;
-  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8); /* Subtle highlight */
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
   margin: 15px 0 5px;
 }
 
@@ -135,7 +134,6 @@
   transform: scale(0.95);
 }
 
-
 .workshopImage {
   width: 100%;
   height: 160px;
@@ -148,8 +146,8 @@
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
+  width: 100%;
+  height: 100%;
   background: rgba(0, 0, 0, 0.8);
   display: flex;
   align-items: center;
@@ -158,18 +156,34 @@
 }
 
 .popupContent {
-  background: linear-gradient(45deg, #141414, #3d3c3c);
-  padding: 25px;
+  background: #c6c4c4;
+  color: #000;
+  padding: 50px;
+  padding-top: 10px;
   border-radius: 15px;
-  width: 50%;
-  max-width: 500px;
-  max-height: 70vh;
-  color: #fdfdfd;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-  position: relative;
-  text-align: center;
-  animation: popupAppear 0.4s ease;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  text-align: left;
   overflow-y: auto;
+  max-height: 80vh;
+}
+
+.buttonContainer{
+  margin-top: 20px;
+  text-align: center;
+}
+
+.popupContent h3 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: #030303;
+}
+
+.popupContent p {
+  font-size: 1rem;
+  color: #010101;
+  margin-bottom: 20px;
 }
 
 @keyframes popupAppear {
@@ -253,7 +267,7 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  background: linear-gradient(145deg, #ff6f6f, #ff3c3c);
+  background: linear-gradient(145deg, #ff6f6f, #f48e21);
   color: white;
   border: none;
   padding: 12px;
@@ -277,11 +291,9 @@
     object-fit: contain;
   }
 
-
-
 .fullScreenButton {
   margin-top: 10px;
-  padding: 8px 12px;
+  padding: 10px 14px;
   background-color: #007bff;
   color: #fff;
   border: none;
@@ -304,3 +316,23 @@
   }
 }
 
+.mapContainer {
+  margin: 0;
+  padding: 0;
+  width: 95%;
+  display: flex;
+  justify-content: center;
+  align-items: center;  
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  border: 2px solid #f0f0f0;
+  margin: 0 auto;
+}
+
+.mapContainer .google-map {
+  width: 100%;
+  height: 300px;
+  border: none;
+  display: block;
+}
