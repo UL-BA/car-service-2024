@@ -1,7 +1,7 @@
 const Favorite = require("./favorite.model");
 
 // Get all favorites for a user
-exports.getFavorites = async (req, res) => {
+const getFavorites = async (req, res) => {
   const { userId } = req.params;
   if (!userId) {
     return res.status(400).json({ error: "Missing userId parameter" });
@@ -17,7 +17,7 @@ exports.getFavorites = async (req, res) => {
 };
 
 // Add an item to favorites
-exports.addFavorite = async (req, res) => {
+const addFavorite = async (req, res) => {
   console.log("Request body received:", req.body); // Log the request body
   const { userId, itemId } = req.body;
 
@@ -43,23 +43,25 @@ exports.addFavorite = async (req, res) => {
 };
 
 // Remove an item from favorites
-exports.removeFavorite = async (req, res) => {
+const removeFavorite = async (req, res) => {
   const { userId, itemId } = req.body;
+
   if (!userId || !itemId) {
-    return res
-      .status(400)
-      .json({ error: "Missing userId or itemId in request body" });
+    return res.status(400).json({ error: "userId and itemId are required." });
   }
 
   try {
-    const result = await Favorite.deleteOne({ userId, itemId });
+    console.log(`Removing favorite for user: ${userId}, item: ${itemId}`);
+    const result = await Favorite.deleteOne({ userId, itemId }); // Deletion logic
     if (result.deletedCount === 0) {
-      return res.status(404).json({ error: "Favorite not found" });
+      return res.status(404).json({ error: "Favorite not found." });
     }
-
-    res.status(200).json({ message: "Favorite removed successfully" });
+    res.status(200).json({ message: "Favorite removed successfully." });
   } catch (error) {
     console.error("Error removing favorite:", error);
-    res.status(500).json({ error: "Failed to remove favorite" });
+    res.status(500).json({ error: "Failed to remove favorite." });
   }
 };
+
+// Export the functions
+module.exports = { getFavorites, addFavorite, removeFavorite };
