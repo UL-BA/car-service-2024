@@ -5,6 +5,8 @@ import Header from "./components/Header";
 import MainSection from "./components/MainSection";
 import InfoSection from "./components/InfoSection";
 import ServicesSection from "./components/ServicesSection";
+import CarWashSection from './components/CarWashes';
+import WorkshopToggleMenu from './components/ToggleMenu';
 import TestimonialsSection from "./components/TestimonialsSection";
 import LoginSignupPage from "./components/LoginSignupPage";
 import ProfilePage from "./components/ProfilePage";
@@ -44,22 +46,24 @@ function App() {
           <Header />
           <ScrollToSectionHandler />
           <Routes>
-            {/* Home and main sections */}
-            <Route
-              path="/"
-              element={
-                <>
-                  <MainSection id="home" />
-                  <InfoSection id="info" />
-                  <ServicesSection id="workshops" />
-                  <TestimonialsSection id="testimonials" />
-                </>
-              }
-            />
-            {/* Login/Signup Page */}
-            <Route path="/login" element={<LoginSignupPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-          </Routes>
+  {/* Home and main sections */}
+  <Route
+    path="/"
+    element={
+      <>
+        <MainSection id="home" />
+        <InfoSection id="info" />
+        <WorkshopToggleMenu id="togglemenu" />
+        <TestimonialsSection id="testimonials" />
+      </>
+    }
+  />
+  {/* These routes will be accessed in new tabs */}
+  <Route path="/car-services" element={<ServicesSection />} />
+  <Route path="/car-washes" element={<CarWashSection />} />
+  <Route path="/login" element={<LoginSignupPage />} />
+  <Route path="/profile" element={<ProfilePage />} />
+</Routes>
           <Footer />
         </div>
       </Router>

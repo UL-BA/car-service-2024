@@ -11,6 +11,7 @@ import {
 import { useAuth } from "../../contexts/AuthContext";
 import config from "../../config";
 import favs from "../../assets/favs.png";
+import kitten from "./kitten.png";
 import unfavs from "../../assets/unfavs.png";
 import Notification from "./message/index";
 import AdvancedMarker from "./marker";
@@ -133,6 +134,18 @@ const ServicesSection = () => {
 
   return (
     <section id="workshops" className={styles.workshopGallery}>
+      <h2 className={styles.title}>{"    "}</h2>
+      <div className="kittenSection">
+        <img
+          src={kitten}
+          alt="Kitten"
+          style={{
+           width: "100%",
+           height: "60vh",
+        }}
+        />
+      </div>
+      <h2 className={styles.title}>{"Enter the name, address of the workshop or the service you're looking for."}</h2>
       <div className={styles.searchContainer}>
         <input
           type="text"
