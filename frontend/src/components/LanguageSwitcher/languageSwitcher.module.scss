@@ -1,21 +1,21 @@
 .languageSwitcher {
   display: flex;
-  gap: 8px; // Reduced gap between buttons
+  gap: 8px;
   margin-top: 0px;
-  height: 100%; // Match parent height
+  height: 100%;
 
   button {
     background: transparent;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 4px 8px; // Reduced padding
+    padding: 4px 8px;
     border-radius: 4px;
     color: white;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-size: 14px; // Smaller font
+    font-size: 14px;
     display: flex;
     align-items: center;
-    height: 28px; // Fixed height to match other nav items
+    height: 28px;
 
     &:hover {
       background: rgba(255, 255, 255, 0.1);

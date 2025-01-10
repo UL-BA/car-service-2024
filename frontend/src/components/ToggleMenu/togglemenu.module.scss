@@ -1,0 +1,59 @@
+.menuContainer {
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  
+  @media (min-width: 768px) {
+    flex-direction: row;
+    padding: 60px 40px;
+  }
+}
+
+.menuButton {
+  flex: 1;
+  height: 160px;
+  border-radius: 16px;
+  padding: 24px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(145deg, #fa8d10, #ecd466);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+  }
+
+  &.washButton {
+    background: linear-gradient(145deg, #3b82f6, #06b6d4);
+  }
+}
+
+.buttonContent {
+  text-align: center;
+  color: white;
+}
+
+.buttonTitle {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  transition: transform 0.3s ease;
+
+  .menuButton:hover & {
+    transform: scale(1.1);
+  }
+}
+
+.buttonSubtitle {
+  font-size: 14px;
+  opacity: 0.8;
+}

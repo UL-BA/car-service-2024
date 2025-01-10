@@ -1,7 +1,6 @@
 const { messaging } = require("firebase-admin");
 const Favorite = require("./favorite.model");
 
-// Get all favorites for a user
 const getFavorites = async (req, res) => {
   const { userId } = req.params;
   if (!userId) {
@@ -17,9 +16,8 @@ const getFavorites = async (req, res) => {
   }
 };
 
-// Add an item to favorites
 const addFavorite = async (req, res) => {
-  console.log("Request body received:", req.body); // Log the request body
+  console.log("Request body received:", req.body);
   const { userId, itemId } = req.body;
 
   if (!userId || !itemId) {
@@ -43,7 +41,6 @@ const addFavorite = async (req, res) => {
   }
 };
 
-// Remove an item from favorites
 const removeFavorite = async (req, res) => {
   const { userId, itemId } = req.body;
 
@@ -53,7 +50,7 @@ const removeFavorite = async (req, res) => {
 
   try {
     console.log(`Removing favorite for user: ${userId}, item: ${itemId}`);
-    const result = await Favorite.deleteOne({ userId, itemId }); // Deletion logic
+    const result = await Favorite.deleteOne({ userId, itemId }); 
     if (result.deletedCount === 0) {
       return res.status(404).json({ error: "Favorite not found." });
     }
@@ -64,5 +61,4 @@ const removeFavorite = async (req, res) => {
   }
 };
 
-// Export the functions
 module.exports = { getFavorites, addFavorite, removeFavorite };

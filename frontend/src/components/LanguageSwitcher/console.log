@@ -1,0 +1,25 @@
+const LanguageSwitcher = () => {
+  const { i18n } = useTranslation();
+
+  const changeLanguage = (lang) => {
+    console.log('Changing language to:', lang);
+    i18n.changeLanguage(lang);
+  };
+
+  return (
+    <div className={styles.languageSwitcher}>
+      <button
+        className={i18n.language === 'en' ? styles.active : ''}
+        onClick={() => changeLanguage('en')}
+      >
+        🇬🇧 EN
+      </button>
+      <button
+        className={i18n.language === 'pl' ? styles.active : ''}
+        onClick={() => changeLanguage('pl')}
+      >
+        🇵🇱 PL
+      </button>
+    </div>
+  );
+};
