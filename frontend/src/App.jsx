@@ -5,7 +5,6 @@ import Header from "./components/Header";
 import MainSection from "./components/MainSection";
 import InfoSection from "./components/InfoSection";
 import ServicesSection from "./components/ServicesSection";
-import CarWashSection from './components/CarWashes';
 import WorkshopToggleMenu from './components/ToggleMenu';
 import TestimonialsSection from "./components/TestimonialsSection";
 import LoginSignupPage from "./components/LoginSignupPage";
@@ -60,7 +59,6 @@ function App() {
   />
   {/* These routes will be accessed in new tabs */}
   <Route path="/car-services" element={<ServicesSection />} />
-  <Route path="/car-washes" element={<CarWashSection />} />
   <Route path="/login" element={<LoginSignupPage />} />
   <Route path="/profile" element={<ProfilePage />} />
 </Routes>
