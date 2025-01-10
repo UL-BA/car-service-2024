@@ -1,0 +1,76 @@
+Sprint 3
+
+1. Updated list of Car Services and Car Washes
+
+User Story:
+As a user,
+I want to view an updated and larger list of car services and car washes
+so that I can choose the service I need.
+
+Acceptance Criteria:
+
+Each section includes a categorized and scrollable list of available services and car washes.
+Users can see service names and brief descriptions
+Each service is clickable, redirecting to a detailed information page.
+
+2. Split-Screen Feature for Car Services and Car Washes
+
+User Story:
+As a user,
+I want a split-screen interface to easily compare car services and car washes,
+so that I can quickly locate the service category I need.
+
+Acceptance Criteria:
+
+The page is divided into two sections: Car Services and Car Washes.
+Each section dynamically adjusts its size for easy readability.
+Users can expand one section to focus on it while minimizing the other.
+
+3. Filters: Distance and Dzielnica
+
+User Story:
+As a user,
+I want to filter services by distance (in kilometers) or dzielnica (district),
+so that I can find services that are convenient for my location.
+
+Acceptance Criteria:
+
+Users can specify a maximum distance (e.g., within 5km ).
+A dropdown or selection option lists dzielnice (districts), enabling users to filter services within a specific district.
+
+4. Detailed Service Page with Google Reviews
+
+User Story:
+As a user,
+I want to view detailed information about a service, including Google reviews,
+so that I can make an informed decision.
+
+Acceptance Criteria:
+
+Each service page includes address, contact information, pricing and hours.
+Embedded Google reviews are displayed directly on the page.
+Users can see average ratings and/or individual review excerpts.
+
+5. Open New Page for Selected Services
+
+User Story:
+As a user,
+I want each service I click on to open on a new page,
+so that I can focus on one service’s details at a time.
+
+Acceptance Criteria:
+
+Clicking on any service or car wash redirects to a dedicated service details page.
+The details page includes full information, reviews, and map links.
+
+6. Admin Page for Service Management
+User Story:
+As an admin,
+I want to manage the list of car services and car washes,
+so that I can update, add, or remove services as needed.
+
+Acceptance Criteria:
+
+Admin page includes an interface to add new car services or car washes.
+Admins can edit information and existing service details (name, description, hours, pricing, etc.).
+Admins can delete outdated or incorrect services.
