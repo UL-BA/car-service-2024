@@ -85,6 +85,47 @@ app.get("/api/users/:email", async (req, res) => {
     res.status(500).json({ message: "Error fetching user data", error });
   }
 });
+const axios = require("axios");
+const cheerio = require("cheerio");
+
+app.get("/api/carwashes", async (req, res) => {
+  try {
+    const { page = 1 } = req.query;
+    const url = `https://katalog-firm.cybo.com/PL/łódź/myjnie-samochodowe-i-auto-detailing/?p=${page}`;
+    const { data } = await axios.get(url);
+    const $ = cheerio.load(data);
+
+    const carWashes = [];
+    $('script[type="application/ld+json"]').each((_, element) => {
+      try {
+        const json = JSON.parse($(element).html());
+        if (
+          json["@type"] === "AutoWash" ||
+          json["@type"] === "GasStation" ||
+          json["@type"] === "AutoRepair"
+        ) {
+          carWashes.push({
+            name: json.name,
+            url: json.url,
+            address: json.address?.streetAddress || "",
+            postalCode: json.address?.postalCode || "",
+            locality: json.address?.addressLocality || "",
+            phone: json.telephone || "",
+            rating: json.aggregateRating?.ratingValue || "",
+            reviews: json.aggregateRating?.reviewCount || 0,
+          });
+        }
+      } catch (error) {
+        console.error("Error parsing JSON:", error);
+      }
+    });
+
+    res.json(carWashes);
+  } catch (error) {
+    console.error("Error scraping car washes:", error);
+    res.status(500).json({ error: "Failed to fetch car washes" });
+  }
+});
 
 app.get("/", (req, res) => {
   res.send("Road Ready Server is running!");
