@@ -11,14 +11,12 @@ import {
 import { useAuth } from "../../contexts/AuthContext";
 import config from "../../config";
 import favs from "../../assets/favs.png";
-<<<<<<< HEAD
-=======
 import kitten from "./kitten.png";
->>>>>>> a121f7ae97f9635ab9d7da2a9d67d7e1d8b23cbe
 import unfavs from "../../assets/unfavs.png";
 import Notification from "./message/index";
 import AdvancedMarker from "./marker";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 const GEOCODING_API_URL = `https://maps.googleapis.com/maps/api/geocode/json?key=${config.GOOGLE_MAPS_API_KEY}`;
 
@@ -33,13 +31,13 @@ const ServicesSection = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const { user } = useAuth();
-  const { data: workshops = [], isLoading: workshopsLoading } =
-    useGetWorkshopsQuery();
-  const { data: favorites = [], refetch: refetchFavorites } =
-    useGetFavoritesQuery(user?.uid);
+  const { data: workshops = [], isLoading: workshopsLoading } = useGetWorkshopsQuery();
+  const { data: favorites = [], refetch: refetchFavorites } = useGetFavoritesQuery(user?.uid);
   const [addFavorite] = useAddFavoriteMutation();
   const [removeFavorite] = useRemoveFavoriteMutation();
   const { t } = useTranslation();
+
+  const navigate = useNavigate();
 
   const handleSearchChange = (event) =>
     setSearchQuery(event.target.value.toLowerCase());
@@ -119,6 +117,7 @@ const ServicesSection = () => {
 
   const openPopup = (workshop) => {
     setSelectedWorkshop(workshop);
+    navigate(`/workshop/${workshop._id}`);
     setIsFullScreenMapOpen(false);
   };
 
@@ -137,21 +136,18 @@ const ServicesSection = () => {
 
   return (
     <section id="workshops" className={styles.workshopGallery}>
-<<<<<<< HEAD
-=======
       <h2 className={styles.title}>{"    "}</h2>
       <div className="kittenSection">
         <img
           src={kitten}
           alt="Kitten"
           style={{
-           width: "100%",
-           height: "60vh",
-        }}
+            width: "100%",
+            height: "60vh",
+          }}
         />
       </div>
       <h2 className={styles.title}>{"Enter the name, address of the workshop or the service you're looking for."}</h2>
->>>>>>> a121f7ae97f9635ab9d7da2a9d67d7e1d8b23cbe
       <div className={styles.searchContainer}>
         <input
           type="text"
@@ -227,7 +223,6 @@ const ServicesSection = () => {
                 mapContainerStyle={{
                   width: "100%",
                   height: "250px",
-                  // margin: "0 auto",
                 }}
                 center={markerPosition}
                 zoom={15}

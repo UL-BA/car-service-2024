@@ -1,0 +1,30 @@
+/* Container to center the content */
+.detailsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 20px auto;
+    height: 100vh; /* Take full height of the viewport */
+    text-align: center;
+  }
+  
+  /* Workshop name styling */
+  .detailsContainer h1 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  /* Workshop details styling */
+  .detailsContainer p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.5;
+  }
+  

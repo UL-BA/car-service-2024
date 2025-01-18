@@ -1,15 +1,10 @@
-import React from 'react';
+import { Link } from 'react-router-dom';
 import styles from './togglemenu.module.scss';
 
 const WorkshopToggleMenu = () => {
   return (
     <div className={styles.menuContainer}>
-      <a 
-        href="/car-services" 
-        target="_blank" 
-        rel="noopener noreferrer"
-        className={styles.menuButton}
-      >
+      <Link to="/car-services" className={styles.menuButton}>
         <div className={styles.buttonContent}>
           <div className={styles.buttonTitle}>
             Looking for where to FIX your car?
@@ -18,14 +13,9 @@ const WorkshopToggleMenu = () => {
             Find trusted repair services
           </div>
         </div>
-      </a>
+      </Link>
       
-      <a
-        href="/car-washes"
-        target="_blank"
-        rel="noopener noreferrer"
-        className={`${styles.menuButton} ${styles.washButton}`}
-      >
+      <Link to="/car-washes" className={`${styles.menuButton} ${styles.washButton}`}>
         <div className={styles.buttonContent}>
           <div className={styles.buttonTitle}>
             Looking for where to WASH your car?
@@ -34,7 +24,7 @@ const WorkshopToggleMenu = () => {
             Discover car wash locations
           </div>
         </div>
-      </a>
+      </Link>
     </div>
   );
 };
