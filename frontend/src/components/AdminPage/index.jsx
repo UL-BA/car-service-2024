@@ -6,12 +6,14 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { GoogleMap } from "@react-google-maps/api";
 import config from "../../config";
 import { v4 as uuidv4 } from "uuid";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../firebase/firebase.config";
 
 const GEOCODING_API_URL = `https://maps.googleapis.com/maps/api/geocode/json?key=${config.GOOGLE_MAPS_API_KEY}`;
 
 const AdminPage = () => {
   const navigate = useNavigate();
-  const [services, setServices] = useState([]); // List of workshops/services
+  const [services, setServices] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [form, setForm] = useState({
     name: "",
@@ -19,7 +21,7 @@ const AdminPage = () => {
     address: "",
     pricing: "",
     phone: "",
-    id: uuidv4(), // Include a unique ID field
+    id: uuidv4(),
     paymentMethods: [],
     services: [],
     acceptedBrands: [],
@@ -28,28 +30,40 @@ const AdminPage = () => {
   const [selectedWorkshop, setSelectedWorkshop] = useState(null);
   const [markerPosition, setMarkerPosition] = useState({ lat: 0, lng: 0 });
 
-// Access restriction temporarily disabled for debugging
 useEffect(() => {
-  const auth = getAuth();
-  onAuthStateChanged(auth, async (user) => {
-    if (!user) {
-      //alert("Access Denied: No user found.");
-      navigate("/");
+  const authInstance = getAuth();
+  const fetchUserRole = async (user) => {
+    if (user) {
+      try {
+        const userDoc = await getDoc(doc(db, "user", user.uid));
+        const userRole = userDoc.exists() ? userDoc.data().role : null;
+
+        if (userRole !== "admin") {
+          alert("Access Denied: You are not authorized to access this page.");
+          navigate("/");
+        }
+      } catch (error) {
+        console.error("Error checking user role:", error);
+        navigate("/");
+      }
     } else {
-      console.log("Temporary bypass for testing admin access.");
+      navigate("/");
     }
-  });
+  };
+
+  const unsubscribe = authInstance.onAuthStateChanged(fetchUserRole);
+
+  return () => unsubscribe();
 }, [navigate]);
 
-  // Fetch all services on component load
   useEffect(() => {
     fetchServices();
   }, []);
 
   const fetchServices = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/api/workshop"); // API endpoint
-      setServices(response.data); // Set fetched services
+      const response = await axios.get("http://localhost:3000/api/workshop");
+      setServices(response.data);
     } catch (error) {
       console.error("Error fetching services:", error.response?.data || error.message);
       alert("Failed to load services. Please try again later.");
@@ -70,11 +84,9 @@ useEffect(() => {
     e.preventDefault();
     try {
       if (editId) {
-        // Update workshop
         await axios.put(`http://localhost:3000/api/workshop/${editId}`, form);
         alert("Workshop updated successfully!");
       } else {
-        // Add new workshop
         await axios.post("http://localhost:3000/api/workshop/create-workshop", form);
         alert("Workshop added successfully!");
       }
@@ -122,10 +134,10 @@ useEffect(() => {
         params: { address: workshop.address, region: "PL" },
       });
       const location = response.data.results[0]?.geometry.location;
-      setMarkerPosition(location || { lat: 51.759, lng: 19.457 }); // Default to Lodz, Poland
+      setMarkerPosition(location || { lat: 51.759, lng: 19.457 });
     } catch (error) {
       console.error("Error fetching workshop location:", error);
-      setMarkerPosition({ lat: 51.759, lng: 19.457 }); // Default to Lodz, Poland
+      setMarkerPosition({ lat: 51.759, lng: 19.457 });
     }
   };
 
@@ -133,7 +145,6 @@ useEffect(() => {
     <div className={styles.adminPage}>
       <h1>Admin Dashboard</h1>
 
-      {/* Search Bar */}
       <div className={styles.searchContainer}>
         <input
           type="text"
@@ -144,7 +155,6 @@ useEffect(() => {
         />
       </div>
 
-      {/* Add/Edit Workshop Form */}
       <form onSubmit={handleSubmit} className={styles.form}>
         <input
           type="text"
@@ -188,7 +198,6 @@ useEffect(() => {
         <button type="submit">{editId ? "Update Workshop" : "Add Workshop"}</button>
       </form>
 
-      {/* Workshop List */}
       <ul className={styles.serviceList}>
         {filteredServices.map((service) => (
           <li key={service._id} className={styles.serviceItem}>
@@ -203,7 +212,6 @@ useEffect(() => {
         ))}
       </ul>
 
-      {/* Map for Selected Workshop */}
       {selectedWorkshop && (
         <div className={styles.mapContainer}>
           <h3>Location for: {selectedWorkshop.name}</h3>

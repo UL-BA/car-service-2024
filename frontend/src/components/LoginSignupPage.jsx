@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import styles from "./LoginSignupPage.module.scss";
 import { FaGoogle } from "react-icons/fa";
 import { useForm } from "react-hook-form";
-import { auth, db } from "../firebase/firebase.config"; // Import Firestore and Auth
+import { auth, db } from "../firebase/firebase.config";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
-import { doc, getDoc, setDoc } from "firebase/firestore"; // Firestore functions
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -25,7 +25,28 @@ function LoginSignupPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  // Handle Login or Signup
+  const saveUserToMongoDB = async (uid, email, role = "user") => {
+    try {
+      const token = await auth.currentUser.getIdToken();
+
+      const response = await fetch("http://localhost:3000/api/users/create-user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ uid, email, role }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to save user to MongoDB");
+      }
+      console.log("User successfully saved to MongoDB");
+    } catch (error) {
+      console.error("Error saving user to MongoDB:", error.message);
+    }
+  };
+
   const onSubmit = async (data) => {
     try {
       let userCredential;
@@ -33,45 +54,61 @@ function LoginSignupPage() {
       if (isSignup) {
         userCredential = await createUserWithEmailAndPassword(
           auth,
-          data.email.toLowerCase(), // Normalize email to lowercase
+          data.email.toLowerCase(),
           data.password
         );
 
-        // Save new user to Firestore
         await setDoc(doc(db, "user", userCredential.user.uid), {
           email: userCredential.user.email,
-          role: "user", // Default role
+          role: "user",
           uid: userCredential.user.uid,
         });
+
+        await saveUserToMongoDB(userCredential.user.uid, userCredential.user.email, "user");
+
         console.log("User signed up and document created:", userCredential.user.uid);
         setShowSuccessMessage(true);
       } else {
         userCredential = await signInWithEmailAndPassword(
           auth,
-          data.email.toLowerCase(), // Normalize email to lowercase
+          data.email.toLowerCase(),
           data.password
         );
-        console.log("User logged in:", userCredential.user.uid);
-      }
 
-      // Temporarily bypass role checks and redirect
-      console.log("Bypassing role checks for testing...");
-      navigate("/admin/services");
+        const userDoc = await getDoc(doc(db, "user", userCredential.user.uid));
+        const userRole = userDoc.exists() ? userDoc.data().role : null;
+
+        await saveUserToMongoDB(userCredential.user.uid, userCredential.user.email, userRole);
+
+        if (userRole === "admin") {
+          navigate("/admin/services");
+          console.log("Admin Access Approved");
+        } else {
+          navigate("/profile");
+        }
+      }
     } catch (error) {
       console.error("Login/Signup error:", error.message);
       setError(error.message);
     }
   };
 
-  // Handle Google Sign-In
   const handleGoogleSignIn = async () => {
     try {
       const provider = new GoogleAuthProvider();
       const userCredential = await signInWithPopup(auth, provider);
 
-      // Temporarily bypass role checks and redirect
-      console.log("Bypassing role checks for Google Sign-In...");
-      navigate("/admin/services");
+      const userDoc = await getDoc(doc(db, "user", userCredential.user.uid));
+      const userRole = userDoc.exists() ? userDoc.data().role : "user";
+
+      await saveUserToMongoDB(userCredential.user.uid, userCredential.user.email, userRole);
+
+      if (userRole === "admin") {
+        navigate("/admin/services");
+        console.log("Admin Access Approved");
+      } else {
+        navigate("/profile");
+      }
     } catch (error) {
       console.error("Google Sign-In error:", error.message);
       if (error.code !== "auth/popup-closed-by-user") {

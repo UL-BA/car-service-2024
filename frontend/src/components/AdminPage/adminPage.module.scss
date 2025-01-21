@@ -24,6 +24,7 @@
         border-radius: 4px;
         outline: none;
         transition: border-color 0.3s;
+        color: #000;
   
         &:focus {
           border-color: #007bff;
@@ -55,8 +56,8 @@
         border: 1px solid #ddd;
         border-radius: 4px;
         outline: none;
-        color: #333; /* Set text color */
-  background-color: #fff; /* Ensure background is white */
+        color: #333;
+        background-color: #fff;
   
         &:focus {
           border-color: #007bff;
