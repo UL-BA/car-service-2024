@@ -1,12 +1,18 @@
-const express = require('express');
-const router = express.Router();
-const { postAWorkshop, getAllWorkshops, getSingleWorkshop, UpdateWorkshop, deleteAWorkshop } = require('./workshop.controller');
-const verifyAdminToken = require('../middleware/verifyAdminToken');
+const express = require("express");
 
-router.post("/create-workshop", postAWorkshop);
+const router = express.Router();
+const {
+  postAWorkshop,
+  getAllWorkshops,
+  getSingleWorkshop,
+  UpdateWorkshop,
+  deleteAWorkshop,
+} = require("./workshop.controller");
+
 router.get("/", getAllWorkshops);
+router.post("/create-workshop", postAWorkshop);
 router.get("/:id", getSingleWorkshop);
-router.put("/edit/:id", verifyAdminToken, UpdateWorkshop);
-router.delete("/:id", verifyAdminToken, deleteAWorkshop);
+router.put("/:id", UpdateWorkshop);
+router.delete("/:id", deleteAWorkshop);
 
 module.exports = router;

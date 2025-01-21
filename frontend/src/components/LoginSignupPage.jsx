@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import styles from "./LoginSignupPage.module.scss";
 import { FaGoogle } from "react-icons/fa";
 import { useForm } from "react-hook-form";
-import { auth } from "../firebase/firebase.config";
+import { auth, db } from "../firebase/firebase.config"; // Import Firestore and Auth
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
+import { doc, getDoc, setDoc } from "firebase/firestore"; // Firestore functions
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -24,78 +25,55 @@ function LoginSignupPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
+  // Handle Login or Signup
   const onSubmit = async (data) => {
     try {
       let userCredential;
+
       if (isSignup) {
         userCredential = await createUserWithEmailAndPassword(
           auth,
-          data.email,
+          data.email.toLowerCase(), // Normalize email to lowercase
           data.password
         );
+
+        // Save new user to Firestore
+        await setDoc(doc(db, "user", userCredential.user.uid), {
+          email: userCredential.user.email,
+          role: "user", // Default role
+          uid: userCredential.user.uid,
+        });
+        console.log("User signed up and document created:", userCredential.user.uid);
+        setShowSuccessMessage(true);
       } else {
         userCredential = await signInWithEmailAndPassword(
           auth,
-          data.email,
+          data.email.toLowerCase(), // Normalize email to lowercase
           data.password
         );
+        console.log("User logged in:", userCredential.user.uid);
       }
 
-      // Get token and send to backend
-      const token = await userCredential.user.getIdToken();
-      const response = await fetch(
-        "http://localhost:3000/api/users/create-user",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            email: userCredential.user.email,
-            uid: userCredential.user.uid,
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to create user in database");
-      }
-
-      navigate("/profile");
+      // Temporarily bypass role checks and redirect
+      console.log("Bypassing role checks for testing...");
+      navigate("/admin/services");
     } catch (error) {
+      console.error("Login/Signup error:", error.message);
       setError(error.message);
     }
   };
 
+  // Handle Google Sign-In
   const handleGoogleSignIn = async () => {
     try {
       const provider = new GoogleAuthProvider();
       const userCredential = await signInWithPopup(auth, provider);
 
-      // Get token and send to backend
-      const token = await userCredential.user.getIdToken();
-      const response = await fetch(
-        "http://localhost:3000/api/users/create-user",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            email: userCredential.user.email,
-            uid: userCredential.user.uid,
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to create user in database");
-      }
-
-      navigate("/profile");
+      // Temporarily bypass role checks and redirect
+      console.log("Bypassing role checks for Google Sign-In...");
+      navigate("/admin/services");
     } catch (error) {
+      console.error("Google Sign-In error:", error.message);
       if (error.code !== "auth/popup-closed-by-user") {
         setError(error.message.replace("Firebase:", "").trim());
       }

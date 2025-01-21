@@ -1,15 +1,39 @@
+const { v4: uuidv4 } = require("uuid");
 const Workshop = require("./workshop.model");
+
 
 const postAWorkshop = async (req, res) => {
     try {
-        const newWorkshop = await Workshop({...req.body});
-        await newWorkshop.save();
-        res.status(200).send({message: "Workshop posted successfully", workshop: newWorkshop})
+      const { name, description, address, pricing, phone, id } = req.body;
+  
+      if (!name || !description || !address || !pricing || !phone) {
+        return res.status(400).json({
+          message: "All fields (name, description, address, pricing, phone) are required.",
+        });
+      }
+  
+      const workshopId = id || uuidv4();
+  
+      const existingWorkshop = await Workshop.findOne({ name, address });
+      if (existingWorkshop) {
+        return res.status(400).json({ message: "Workshop already exists." });
+      }
+  
+      const newWorkshop = new Workshop({ ...req.body, id: workshopId });
+      await newWorkshop.save();
+  
+      res.status(201).json({
+        message: "Workshop created successfully.",
+        workshop: newWorkshop,
+      });
     } catch (error) {
-        console.error("Error creating workshop", error);
-        res.status(500).send({message: "Failed to create workshop"})
+      console.error("Error creating workshop:", error);
+      res.status(500).json({
+        message: "Failed to create workshop.",
+        error: error.message || error,
+      });
     }
-}
+  };
 
 const getAllWorkshops = async (req, res) => {
     try {

@@ -1,11 +1,5 @@
 const User = require("./user.model");
-const admin = require("firebase-admin");
-const serviceAccount = require("../../firebase-service-account.json");
-
-
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
-});
+const admin = require("../../firebase-admin"); // Import the centralized Firebase Admin instance
 
 const createOrUpdateUser = async (req, res) => {
     try {
