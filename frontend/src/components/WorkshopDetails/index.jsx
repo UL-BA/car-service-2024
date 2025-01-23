@@ -14,7 +14,28 @@ const WorkshopDetails = () => {
   const { data: workshops = [], isLoading } = useGetWorkshopsQuery();
   const [markerPosition, setMarkerPosition] = useState(null);
   const [map, setMap] = useState(null);
+  const [userLocation, setUserLocation] = useState(null);
+  const [distance, setDistance] = useState(null);
+
   const workshop = workshops.find((w) => w._id === id);
+
+  useEffect(() => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          console.log("User location:", { lat: latitude, lng: longitude });
+          setUserLocation({ lat: latitude, lng: longitude });
+        },
+        (error) => {
+          console.error("Error fetching user location:", error);
+          setUserLocation(null);
+        }
+      );
+    } else {
+      console.warn("Geolocation is not supported by this browser.");
+    }
+  }, []);
 
   useEffect(() => {
     if (isLoading) {
@@ -51,6 +72,32 @@ const WorkshopDetails = () => {
     fetchCoordinates();
   }, [workshop, id, isLoading]);
 
+  useEffect(() => {
+    if (userLocation && markerPosition) {
+      const R = 6371;
+      const toRad = (deg) => (deg * Math.PI) / 180;
+
+      const lat1 = userLocation.lat;
+      const lon1 = userLocation.lng;
+      const lat2 = markerPosition.lat;
+      const lon2 = markerPosition.lng;
+
+      const dLat = toRad(lat2 - lat1);
+      const dLon = toRad(lon2 - lon1);
+
+      const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(toRad(lat1)) *
+          Math.cos(toRad(lat2)) *
+          Math.sin(dLon / 2) *
+          Math.sin(dLon / 2);
+
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      const distance = R * c;
+      setDistance(distance.toFixed(2));
+    }
+  }, [userLocation, markerPosition]);
+
   if (isLoading) return <p>Loading workshops...</p>;
   if (!workshop) return <p>Workshop not found.</p>;
 
@@ -58,33 +105,49 @@ const WorkshopDetails = () => {
 
   return (
     <div className={styles.detailsContainer}>
-      <h3 className={styles.workshopName}>{workshop.name}</h3>
-      <p className={styles.workshopDetails}>
-        <strong>Phone:</strong> {workshop.phone || "N/A"}
-      </p>
-      <p className={styles.workshopDetails}>
-        <strong>Accepted Brands:</strong>{" "}
-        {workshop.acceptedBrands?.join(", ") || "N/A"}
-      </p>
-      <p className={styles.workshopDetails}>
-        <strong>Services:</strong> {workshop.services?.join(", ") || "N/A"}
-      </p>
-      <div className={styles.mapContainer}>
-        <GoogleMap
-          mapContainerStyle={{
-            width: "100%",
-            height: "300px",
-          }}
-          center={markerPosition || { lat: 51.759, lng: 19.457 }}
-          zoom={15}
-          onLoad={(mapInstance) => {
-            console.log("Map loaded:", mapInstance);
-            setMap(mapInstance);
-          }}
-        >
-          {markerPosition && <AdvancedMarker map={map} position={markerPosition} />}
-        </GoogleMap>
-      </div>
+      <header className={styles.header}>
+        <h1 className={styles.workshopName}>{workshop.name}</h1>
+        {distance && (
+          <p className={styles.distance}>
+            <strong>Distance:</strong> {distance} km
+          </p>
+        )}
+      </header>
+
+      <div className={styles.contact}>
+          <h2>Contact:</h2>
+          <span>{workshop.phone || "Not available"}</span>
+        </div>
+  
+      <section className={styles.infoSection}>
+        <div className={styles.infoItem}>
+          <h2>Accepted Brands</h2>
+          <p>{workshop.acceptedBrands?.join(", ") || "Not specified"}</p>
+        </div>
+        <div className={styles.infoItem}>
+          <h2>Services</h2>
+          <p>{workshop.services?.join(", ") || "Not specified"}</p>
+        </div>
+      </section>
+  
+      <section className={styles.mapSection}>
+        <h2>Workshop Location</h2>
+        <div className={styles.mapContainer}>
+          <GoogleMap
+            mapContainerStyle={{
+              width: "100%",
+              height: "400px",
+            }}
+            center={markerPosition || { lat: 51.759, lng: 19.457 }}
+            zoom={15}
+            onLoad={(mapInstance) => {
+              setMap(mapInstance);
+            }}
+          >
+            {markerPosition && <AdvancedMarker map={map} position={markerPosition} />}
+          </GoogleMap>
+        </div>
+      </section>
     </div>
   );
 };
