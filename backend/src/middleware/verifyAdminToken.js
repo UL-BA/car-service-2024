@@ -1,19 +1,21 @@
-const jwt = require('jsonwebtoken');
-const JWT_SECRET = process.env.JWT_SECRET_KEY
+const jwt = require("jsonwebtoken");
 
-const verifyAdminToken =  (req, res, next) => {
-    const token = req.headers['authorization']?.split(' ')[1];
+const verifyAdminToken = (req, res, next) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized: No token provided" });
+  }
 
-    if (!token) {
-        return res.status(401).json({ message: 'Access Denied. No token provided' });
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    if (decoded.role !== "admin") {
+      return res.status(403).json({ message: "Forbidden: Admin access required" });
     }
-    jwt.verify(token, JWT_SECRET, (err, user) => {
-        if (err) {
-            return res.status(403).json({ message: 'Invalid credientials' });
-        }
-        req.user = user;
-        next();
-    })
-}
+    req.user = decoded;
+    next();
+  } catch (error) {
+    res.status(401).json({ message: "Unauthorized: Invalid token" });
+  }
+};
 
-module.exports = verifyAdminToken;
+module.exports = { verifyAdminToken };

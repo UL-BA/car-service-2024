@@ -13,6 +13,8 @@ import ProfilePage from "./components/ProfilePage";
 import { LoadScript } from "@react-google-maps/api";
 import styles from "./app.module.scss";
 import config from "./config";
+import AdminPage from './components/AdminPage/index';
+
 
 const API_KEY = config.GOOGLE_MAPS_API_KEY;
 
@@ -63,6 +65,8 @@ function App() {
   <Route path="/car-washes" element={<CarWashes />} />
   <Route path="/login" element={<LoginSignupPage />} />
   <Route path="/profile" element={<ProfilePage />} />
+  <Route path="/admin/services" element={<AdminPage />} />
+
 </Routes>
           <Footer />
         </div>

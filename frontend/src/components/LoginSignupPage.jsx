@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import styles from "./LoginSignupPage.module.scss";
 import { FaGoogle } from "react-icons/fa";
 import { useForm } from "react-hook-form";
-import { auth } from "../firebase/firebase.config";
+import { auth, db } from "../firebase/firebase.config";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -24,46 +25,70 @@ function LoginSignupPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
+  const saveUserToMongoDB = async (uid, email, role = "user") => {
+    try {
+      const token = await auth.currentUser.getIdToken();
+
+      const response = await fetch("http://localhost:3000/api/users/create-user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ uid, email, role }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to save user to MongoDB");
+      }
+      console.log("User successfully saved to MongoDB");
+    } catch (error) {
+      console.error("Error saving user to MongoDB:", error.message);
+    }
+  };
+
   const onSubmit = async (data) => {
     try {
       let userCredential;
+
       if (isSignup) {
         userCredential = await createUserWithEmailAndPassword(
           auth,
-          data.email,
+          data.email.toLowerCase(),
           data.password
         );
+
+        await setDoc(doc(db, "user", userCredential.user.uid), {
+          email: userCredential.user.email,
+          role: "user",
+          uid: userCredential.user.uid,
+        });
+
+        await saveUserToMongoDB(userCredential.user.uid, userCredential.user.email, "user");
+
+        console.log("User signed up and document created:", userCredential.user.uid);
+        setShowSuccessMessage(true);
       } else {
         userCredential = await signInWithEmailAndPassword(
           auth,
-          data.email,
+          data.email.toLowerCase(),
           data.password
         );
-      }
 
-      // Get token and send to backend
-      const token = await userCredential.user.getIdToken();
-      const response = await fetch(
-        "http://localhost:3000/api/users/create-user",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            email: userCredential.user.email,
-            uid: userCredential.user.uid,
-          }),
+        const userDoc = await getDoc(doc(db, "user", userCredential.user.uid));
+        const userRole = userDoc.exists() ? userDoc.data().role : null;
+
+        await saveUserToMongoDB(userCredential.user.uid, userCredential.user.email, userRole);
+
+        if (userRole === "admin") {
+          navigate("/admin/services");
+          console.log("Admin Access Approved");
+        } else {
+          navigate("/profile");
         }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to create user in database");
       }
-
-      navigate("/profile");
     } catch (error) {
+      console.error("Login/Signup error:", error.message);
       setError(error.message);
     }
   };
@@ -73,29 +98,19 @@ function LoginSignupPage() {
       const provider = new GoogleAuthProvider();
       const userCredential = await signInWithPopup(auth, provider);
 
-      // Get token and send to backend
-      const token = await userCredential.user.getIdToken();
-      const response = await fetch(
-        "http://localhost:3000/api/users/create-user",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            email: userCredential.user.email,
-            uid: userCredential.user.uid,
-          }),
-        }
-      );
+      const userDoc = await getDoc(doc(db, "user", userCredential.user.uid));
+      const userRole = userDoc.exists() ? userDoc.data().role : "user";
 
-      if (!response.ok) {
-        throw new Error("Failed to create user in database");
+      await saveUserToMongoDB(userCredential.user.uid, userCredential.user.email, userRole);
+
+      if (userRole === "admin") {
+        navigate("/admin/services");
+        console.log("Admin Access Approved");
+      } else {
+        navigate("/profile");
       }
-
-      navigate("/profile");
     } catch (error) {
+      console.error("Google Sign-In error:", error.message);
       if (error.code !== "auth/popup-closed-by-user") {
         setError(error.message.replace("Firebase:", "").trim());
       }

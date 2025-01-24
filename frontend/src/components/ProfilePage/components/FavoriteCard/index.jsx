@@ -2,6 +2,10 @@ import React from "react";
 import styles from "./FavoriteCard.module.scss";
 
 const FavoriteCard = ({ favorite, onRemoveFavorite }) => {
+  if (!favorite || !favorite.itemId) {
+    return <div className={styles.favoriteCard}>Invalid Favorite Item</div>;
+  }
+
   const { name, address, phone, id } = favorite.itemId;
 
   return (

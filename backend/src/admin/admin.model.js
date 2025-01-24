@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const workshopSchema = new mongoose.Schema({
+const serviceSchema = new mongoose.Schema({
   name: { type: String, required: true },
   description: { type: String, required: true },
   address: { type: String, required: true },
@@ -12,4 +12,4 @@ const workshopSchema = new mongoose.Schema({
   acceptedBrands: { type: [String], default: [] },
 });
 
-module.exports = mongoose.model('Workshop', workshopSchema);
+module.exports = mongoose.model("Service", serviceSchema);

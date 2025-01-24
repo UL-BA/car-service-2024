@@ -26,20 +26,15 @@ const ProfilePage = () => {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      if (user) {
+      if (!user) {
+        navigate("/login"); // Redirect to login page if user logs out
+      } else {
         setNickname(user.displayName || "User");
-
         try {
           const response = await axios.get(
             `http://localhost:3000/api/users/${user.email}`
           );
-
-          if (response.data.profilePhoto) {
-            setPhotoUrl(response.data.profilePhoto);
-          } else {
-            console.log("No profile photo found in database.");
-            setPhotoUrl("");
-          }
+          setPhotoUrl(response.data.profilePhoto || "");
         } catch (error) {
           console.error("Error fetching user data:", error);
         }
@@ -47,9 +42,13 @@ const ProfilePage = () => {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [navigate]);
 
   const handleRemoveFavorite = async (itemId) => {
+    if (!user) {
+      console.error("No user found. Cannot remove favorite.");
+      return;
+    }
     try {
       await removeFavorite({ userId: user.uid, itemId }).unwrap();
       refetchFavorites();
@@ -67,27 +66,25 @@ const ProfilePage = () => {
   };
 
   const handleUpload = async (file) => {
+    if (!user) {
+      console.error("No user found. Cannot upload profile photo.");
+      return;
+    }
     const formData = new FormData();
     formData.append("profilePhoto", file);
-    formData.append("email", user?.email);
+    formData.append("email", user.email);
 
     try {
       const response = await axios.post(
         "http://localhost:3000/upload",
         formData,
         {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+          headers: { "Content-Type": "multipart/form-data" },
         }
       );
-      console.log("Upload successful:", response.data);
       setPhotoUrl(response.data.photoUrl);
     } catch (error) {
-      console.error(
-        "Upload failed:",
-        error.response ? error.response.data : error.message
-      );
+      console.error("Upload failed:", error.response?.data || error.message);
     }
   };
 
@@ -111,7 +108,9 @@ const ProfilePage = () => {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      navigate("/");
+      setNickname("User");
+      setPhotoUrl("");
+      navigate("/login");
     } catch (error) {
       console.error("Logout error:", error);
     }

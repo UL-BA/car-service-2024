@@ -2,6 +2,7 @@ const express = require("express");
 const multer = require("multer");
 const path = require("path");
 const Icon = require("./src/icons/icon.model");
+const { v4: uuidv4 } = require("uuid");
 
 const app = express();
 const cors = require("cors");
@@ -11,6 +12,7 @@ const port = process.env.PORT || 3000;
 const userRoutes = require("./src/users/user.route");
 const workshopRoutes = require("./src/cars/workshop.route");
 const favoriteRoutes = require("./src/favorite/favorite.route");
+const adminRoutes = require('./src/admin/admin.route');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -31,11 +33,45 @@ app.use(
   }),
 );
 
+app.use('/api/admin', adminRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/workshop", workshopRoutes);
 app.use("/api/favorites", favoriteRoutes);
 
 app.use("/userPhoto", express.static("userPhoto"));
+
+app.post("/api/workshop/create-workshop", async (req, res) => {
+  try {
+    const { name, description, address, pricing, phone } = req.body;
+
+    // Validate required fields
+    if (!name || !description || !address || !pricing || !phone || !id) {
+      return res.status(400).json({
+          message: "All fields (name, description, address, pricing, phone, id) are required.",
+      });
+  }
+
+    // Generate id if not provided
+    const id = req.body.id || uuidv4();
+
+    // Create a new workshop
+    const newWorkshop = new Workshop({ ...req.body, id });
+    await newWorkshop.save();
+
+    res.status(201).json({
+      message: "Workshop created successfully",
+      data: newWorkshop,
+    });
+  } catch (error) {
+    console.error("Error while creating workshop:", error);
+    res.status(500).json({
+      message: "Failed to create workshop.",
+      error: error.message || error,
+    });
+  }
+});
+
+
 
 app.post("/upload", upload.single("profilePhoto"), async (req, res) => {
   if (req.file) {
