@@ -2,10 +2,7 @@
   "dependencies": {
     "@react-google-maps/api": "^2.20.3",
     "axios": "^1.7.9",
-<<<<<<< HEAD
-=======
     "cheerio": "^1.0.0",
->>>>>>> a121f7ae97f9635ab9d7da2a9d67d7e1d8b23cbe
     "gsap": "^3.12.5",
     "multer": "^1.4.5-lts.1",
     "react-i18next": "^15.2.0",
