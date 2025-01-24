@@ -1,0 +1,172 @@
+body {
+  background-color: black;
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.detailsContainer {
+  max-width: 90vw;
+  margin: 5vh auto;
+  padding: 2vw;
+  background-color: #ddd;
+  border-radius: 1rem;
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+  margin-top: 10vh;
+}
+
+.header {
+  text-align: center;
+  justify-content: center;
+}
+
+.workshopName {
+  font-size: 3rem;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.distance {
+  font-size: 1.3rem;
+  color: #16a085;
+  background-color: #e8f8f5;
+  display: inline-block;
+  padding: 0.5vh 1vw;
+  border-radius: 0.5rem;
+}
+
+.infoSection {
+  display: grid;
+  grid-template-columns: repeat(2, 40%);
+  gap: 2vw;
+  margin-bottom: 5vh;
+  justify-items: center;
+  justify-content: center;
+}
+
+.infoItem {
+  background-color: #f9f9f9;
+  padding: 2vw;
+  border-radius: 1rem;
+  text-align: center;
+  justify-content: center;
+  box-shadow: 0 0.2rem 0.75rem rgba(0, 0, 0, 0.05);
+}
+
+.infoItem h2 {
+  font-size: 1.3rem;
+  color: #34495e;
+  margin-bottom: 0.5rem;
+}
+
+.infoItem p {
+  font-size: 1rem;
+  color: #7f8c8d;
+  line-height: 1.4;
+  max-height: 15rem;
+  overflow-y: auto;
+}
+
+.servicesItem {
+  grid-column: span 2;
+  background-color: #f1f8e9;
+  padding: 2vw;
+  text-align: left;
+}
+
+.servicesItem h2 {
+  color: #2e7d32;
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+}
+
+.mapSection {
+  margin-top: 2vh;
+  text-align: center;
+}
+
+.mapSection h2 {
+  font-size: 1.3rem;
+  color: #34495e;
+  margin-bottom: 1.5rem;
+}
+
+.mapContainer {
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 2px solid #ecf0f1;
+  width: 90%;
+  margin: 0 auto;
+  max-height: 40vh;
+}
+
+@media (max-width: 1200px) {
+  .infoSection {
+    grid-template-columns: repeat(2, 45%);
+    justify-items: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .infoSection {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    margin-bottom: 5vh;
+  }
+
+  .detailsContainer {
+    padding: 3vw;
+  }
+
+  .mapContainer {
+    width: 100%;
+    max-height: 30vh;
+    margin: 0 auto;
+  }
+
+  .servicesItem {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .workshopName {
+    font-size: 1.6rem;
+  }
+
+  .infoItem h2 {
+    font-size: 1.1rem;
+  }
+
+  .infoItem p {
+    font-size: 0.9rem;
+  }
+
+  .servicesItem h2 {
+    font-size: 1.4rem;
+  }
+}
+
+.contact {
+  margin-bottom: 6vh;
+  display: inline-block;
+  text-align: center;
+  color: #16a085;
+  background-color: #e8f8f5;
+  padding: 0.5vh 1vw;
+  border-radius: 0.5rem;
+}
+
+.contact h2 {
+  font-size: 1.5rem;
+  color: #34495e;
+  margin: 0;
+}
+
+.contact span {
+  margin-top: 0.3vw;
+  font-size: 1.1rem;
+  color: #2c3e50;
+}
