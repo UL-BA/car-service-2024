@@ -11,7 +11,7 @@ import {
 import { useAuth } from "../../contexts/AuthContext";
 import config from "../../config";
 import favs from "../../assets/favs.png";
-import kitten from "./kitten.png";
+import fix from "./fix.mp4";
 import unfavs from "../../assets/unfavs.png";
 import Notification from "./message/index";
 import AdvancedMarker from "./marker";
@@ -134,17 +134,28 @@ const ServicesSection = () => {
 
   return (
     <section id="workshops" className={styles.workshopGallery}>
-      <h2 className={styles.title}>{"    "}</h2>
-      <div className="kittenSection">
-        <img
-          src={kitten}
-          alt="Kitten"
-          style={{
-           width: "100%",
-           height: "60vh",
-        }}
-        />
+<div className={styles.heroSection}>
+        <video
+          autoPlay
+          loop
+          muted
+          className={styles.backgroundVideo}
+          src={fix}
+        >
+          Car Services in Łódź
+        </video>
+        <div className={styles.heroOverlay}>
+          <h1>Best Rated Workshops in Łódź</h1>
+          <p>Discover the finest automotive care services</p>
+          <button 
+            onClick={() => document.querySelector(`.${styles.container}`).scrollIntoView({ behavior: 'smooth' })}
+            className={styles.scrollButton}
+          >
+            Explore Locations
+          </button>
+        </div>
       </div>
+
       <h2 className={styles.title}>{"Enter the name, address of the workshop or the service you're looking for."}</h2>
       <div className={styles.searchContainer}>
         <input

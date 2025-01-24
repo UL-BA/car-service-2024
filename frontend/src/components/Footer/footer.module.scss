@@ -1,65 +1,76 @@
 .footer {
-    position: relative;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100px;
-    background-color: #121111;
-    color: white;
-    padding: 20px 0;
-    text-align: center;
-}
-
-.container {
-    margin: 0 auto;
-    padding: 0 15px;
-}
-
-.content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.links {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-}
-
-.links a {
-    color: white;
-    text-decoration: none;
-    transition: color 0.3s;
-}
-
-.links a:hover {
-    color: #007bff;
-}
-
-.socials {
-    display: flex;
-    gap: 15px;
-}
-
-.socials a {
-    color: white;
-    font-size: 24px;
-    transition: color 0.3s;
-}
-
-.socials a:hover {
-    color: #007bff;
-}
-
-.bottom {
-    margin-top: 10px;
-}
-
-.bottom p {
-    font-size: 0.875rem;
-    color: #aaa;
-    margin: 0;
-}
+    background: #1a1a1a;
+    color: #f4a261;
+    padding: 2rem 1rem;
+  
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+  
+    .heading {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      color: #ff6700;
+    }
+  
+    .sortOptions {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1rem;
+  
+      button {
+        background: #333;
+        border: none;
+        color: #f4a261;
+        padding: 0.5rem 1rem;
+        margin: 0 0.5rem;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background 0.3s;
+  
+        &:hover,
+        &.active {
+          background: #ff6700;
+          color: #fff;
+        }
+      }
+    }
+  
+    .reviews {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+  
+      .review {
+        background: #292929;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  
+        p {
+          margin: 0.5rem 0;
+        }
+  
+        a {
+          color: #ff6700;
+          text-decoration: none;
+          font-weight: bold;
+  
+          &:hover {
+            text-decoration: underline;
+            color: #f4a261;
+          }
+        }
+      }
+    }
+  
+    .bottom {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      color: #ccc;
+    }
+  }
+  
