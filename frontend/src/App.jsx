@@ -6,15 +6,15 @@ import MainSection from "./components/MainSection";
 import InfoSection from "./components/InfoSection";
 import ServicesSection from "./components/ServicesSection";
 import CarWashes from "./components/CarWashes";
-import WorkshopToggleMenu from './components/ToggleMenu';
+import WorkshopToggleMenu from "./components/ToggleMenu";
 import TestimonialsSection from "./components/TestimonialsSection";
 import LoginSignupPage from "./components/LoginSignupPage";
 import ProfilePage from "./components/ProfilePage";
+import WorkshopDetails from "./components/WorkshopDetails";
 import { LoadScript } from "@react-google-maps/api";
 import styles from "./app.module.scss";
 import config from "./config";
-import AdminPage from './components/AdminPage/index';
-
+import AdminPage from "./components/AdminPage/index";
 
 const API_KEY = config.GOOGLE_MAPS_API_KEY;
 
@@ -48,26 +48,33 @@ function App() {
           <Header />
           <ScrollToSectionHandler />
           <Routes>
-  {/* Home and main sections */}
-  <Route
-    path="/"
-    element={
-      <>
-        <MainSection id="home" />
-        <InfoSection id="info" />
-        <WorkshopToggleMenu id="togglemenu" />
-        <TestimonialsSection id="testimonials" />
-      </>
-    }
-  />
-  {/* These routes will be accessed in new tabs */}
-  <Route path="/car-services" element={<ServicesSection />} />
-  <Route path="/car-washes" element={<CarWashes />} />
-  <Route path="/login" element={<LoginSignupPage />} />
-  <Route path="/profile" element={<ProfilePage />} />
-  <Route path="/admin/services" element={<AdminPage />} />
+            {/* Home and main sections */}
+            <Route
+              path="/"
+              element={
+                <>
+                  <MainSection id="home" />
+                  <InfoSection id="info" />
+                  <WorkshopToggleMenu id="togglemenu" />
+                  <TestimonialsSection id="testimonials" />
+                </>
+              }
+            />
 
-</Routes>
+            {/* Car services and car washes */}
+            <Route path="/car-services" element={<ServicesSection />} />
+            <Route path="/car-washes" element={<CarWashes />} />
+
+            {/* Workshop details */}
+            <Route path="/workshop/:id" element={<WorkshopDetails />} />
+
+            {/* Login and profile pages */}
+            <Route path="/login" element={<LoginSignupPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+
+            {/* Admin page */}
+            <Route path="/admin/services" element={<AdminPage />} />
+          </Routes>
           <Footer />
         </div>
       </Router>

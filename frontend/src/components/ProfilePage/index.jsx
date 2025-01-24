@@ -14,7 +14,7 @@ import FavoriteCard from "./components/FavoriteCard";
 
 const ProfilePage = () => {
   const [nickname, setNickname] = useState("User");
-  const [image, setImage] = useState(null);
+  const [, setImage] = useState(null);
   const [photoUrl, setPhotoUrl] = useState("");
   const navigate = useNavigate();
   const user = auth.currentUser;
